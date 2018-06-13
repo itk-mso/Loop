@@ -1,6 +1,6 @@
 # Loop Changelog
 
-## Loop 1.8.0
+## Loop 1.8.1
 * LOOP-555: Added loop_disable_post module
 * Cleaned up code documentation
 

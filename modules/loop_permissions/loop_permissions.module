@@ -241,6 +241,7 @@ function loop_permissions_secure_permissions($role) {
       'access path admin/content/abuse',
       'access path admin/content/abuse/*',
       'administer taxonomy',
+      'administer blocks',
       'administer comments',
       'administer complaints',
       'administer menu-loop-primary-menu menu items',

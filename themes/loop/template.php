@@ -23,6 +23,10 @@ function loop_preprocess_page(&$variables) {
     else {
       $variables['search'] = module_invoke('search', 'block_view', 'form');
     }
+    // Apply search links if module is active.
+    if (module_exists('loop_search_links')) {
+      $variables['search_links'] = module_invoke('loop_search_links', 'block_view', 'loop_search_links_block');
+    }
   }
 
   // Drupal core got a minor bug with active trail on 'My account'.

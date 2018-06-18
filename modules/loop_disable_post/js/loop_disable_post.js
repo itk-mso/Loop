@@ -7,5 +7,6 @@
   $(document).ready(function($) {
     $('.layout-dashboard .layout--inner:first-child').addClass('is-hidden');
     $('.view-loop-user-subscriptions').addClass('is-hidden');
+    $('.block-my-content').remove();
   });
 })(jQuery);

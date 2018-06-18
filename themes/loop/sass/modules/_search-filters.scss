@@ -216,3 +216,25 @@
     }
   }
 }
+
+// Styling for search filters links module
+.search-filter--links {
+  overflow: hidden;
+
+  .search-filter--link-wrapper {
+    width: 25%;
+    padding:1em;
+    box-sizing: border-box;
+    float:left;
+  }
+
+  .search-filter--link {
+    border-radius:.4em;
+    text-decoration: none;
+    width: 100%;
+    display: block;
+    padding: .5em 0;
+    text-align: center;
+    color:$white;
+  }
+}

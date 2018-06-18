@@ -3758,10 +3758,10 @@ a.question--term {
     float: left; }
     @media only screen and (min-width: 22.5em) {
       .search-filter--links .search-filter--link-wrapper {
-        flex: 0 0 50%; } }
+        width: 50%; } }
     @media only screen and (min-width: 28em) {
       .search-filter--links .search-filter--link-wrapper {
-        flex: 0 0 25%; } }
+        width: 25%; } }
   .search-filter--links .search-filter--link {
     border-radius: .4em;
     text-decoration: none;

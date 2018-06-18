@@ -12,7 +12,7 @@
  */
 ?>
 <div class="search-filters--search-box search-filter--links">
-  <label><?php print t('Show content from'); ?></label>
+  <div><label><?php print t('Show content from'); ?></label></div>
   <?php foreach ($items as $delta => $item): ?>
     <div class="search-filter--link-wrapper">
       <a style="background-color:<?php  print $item['color']; ?>" class="search-filter--link" href="<?php print $item['path']; ?>"><?php print $item['name']; ?></a>

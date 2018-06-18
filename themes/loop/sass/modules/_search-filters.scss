@@ -227,11 +227,11 @@
     box-sizing: border-box;
     float:left;
 
-    @include breakpoint($breakpoint-3) {
+    @include breakpoint(490px) {
       width: 50%;
     }
 
-    @include breakpoint($breakpoint-4) {
+    @include breakpoint(960px) {
       width: 25%;
     }
   }

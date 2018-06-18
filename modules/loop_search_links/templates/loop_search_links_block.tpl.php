@@ -11,7 +11,7 @@
  * - $items: An array of field values. Use render() to output them.
  */
 ?>
-
+<label><?php print t('Show content from'); ?></label>
 <div class="search-filters--search-box search-filter--links">
   <?php foreach ($items as $delta => $item): ?>
     <div class="search-filter--link-wrapper">

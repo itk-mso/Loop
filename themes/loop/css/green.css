@@ -3756,10 +3756,10 @@ a.question--term {
     padding: 1em;
     box-sizing: border-box;
     float: left; }
-    @media only screen and (min-width: 22.5em) {
+    @media only screen and (min-width: 490px) {
       .search-filter--links .search-filter--link-wrapper {
         width: 50%; } }
-    @media only screen and (min-width: 28em) {
+    @media only screen and (min-width: 960px) {
       .search-filter--links .search-filter--link-wrapper {
         width: 25%; } }
   .search-filter--links .search-filter--link {

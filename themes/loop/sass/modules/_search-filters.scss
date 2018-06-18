@@ -222,10 +222,18 @@
   overflow: hidden;
 
   .search-filter--link-wrapper {
-    width: 25%;
+    width: 100%;
     padding:1em;
     box-sizing: border-box;
     float:left;
+
+    @include breakpoint($breakpoint-2) {
+      flex: 0 0 50%;
+    }
+
+    @include breakpoint($breakpoint-3) {
+      flex: 0 0 25%;
+    }
   }
 
   .search-filter--link {

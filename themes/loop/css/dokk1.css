@@ -3752,10 +3752,16 @@ a.question--term {
 .search-filter--links {
   overflow: hidden; }
   .search-filter--links .search-filter--link-wrapper {
-    width: 25%;
+    width: 100%;
     padding: 1em;
     box-sizing: border-box;
     float: left; }
+    @media only screen and (min-width: 22.5em) {
+      .search-filter--links .search-filter--link-wrapper {
+        flex: 0 0 50%; } }
+    @media only screen and (min-width: 28em) {
+      .search-filter--links .search-filter--link-wrapper {
+        flex: 0 0 25%; } }
   .search-filter--links .search-filter--link {
     border-radius: .4em;
     text-decoration: none;

@@ -4727,6 +4727,9 @@ a.question--term.taxonomy-keyword {
   font-weight: bold;
   margin-bottom: 0; }
 
+.loop-documents .toc-filter-back-to-top {
+  display: none; }
+
 /**
  * Quickbox module
  */

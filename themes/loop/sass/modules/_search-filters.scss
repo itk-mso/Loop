@@ -220,6 +220,11 @@
 // Styling for search filters links module
 .search-filter--links {
   overflow: hidden;
+  margin-bottom: 1.5em;
+
+  .search-filter--label {
+    padding: 0 1em;
+  }
 
   .search-filter--link-wrapper {
     width: 100%;

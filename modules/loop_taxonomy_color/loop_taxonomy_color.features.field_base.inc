@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * loop_search_links.features.field_base.inc
+ * loop_taxonomy_color.features.field_base.inc
  */
 
 /**
  * Implements hook_field_default_field_bases().
  */
-function loop_search_links_field_default_field_bases() {
+function loop_taxonomy_color_field_default_field_bases() {
   $field_bases = array();
   
   // Exported field_base: 'field_color'.
@@ -25,7 +25,7 @@ function loop_search_links_field_default_field_bases() {
     'locked' => 0,
     'module' => 'color_field',
     'settings' => array(
-      'default_colors' => '#000000,#222222,#F3F3F3,#2A398B,#F1F3FF,#EFBB00,#FFFBBC,#068711,#F3F8F3,#FFFFFF',
+      'default_colors' => '#000000,#FFFFFF',
     ),
     'translatable' => 0,
     'type' => 'color_field_rgb',

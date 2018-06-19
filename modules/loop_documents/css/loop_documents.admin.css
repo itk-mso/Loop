@@ -8,6 +8,7 @@
 }
 
 /* This is a hack – but it works! */
+#edit-field-quickbox .filter-wrapper,
 #edit-body .filter-wrapper {
   display: none;
 }

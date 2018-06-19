@@ -1,31 +1,15 @@
 <?php
+
 /**
  * @file
- * Drupal needs this blank file.
+ * Provide search links.
  */
 
-function loop_search_links_form_taxonomy_form_term_alter(&$form, &$form_state) {
-  $link_colors = explode (',', variable_get('loop_search_links_colors'));
-  $form_state['field']['field_color']['und']['field']['settings']['default_colors'] = '#000000';
-  $form['field_color'][LANGUAGE_NONE][0]['rgb']['#attached']['js'][2]['data']['color_field']['#div-field-color-und-0--rgb']['colors'] = $link_colors;
-}
-
-function loop_search_links_form_system_theme_settings_alter(&$form, &$form_state) {
-  $form['loop_search_links_link_colors'] = array(
-    '#title' => t('Search links colors'),
-    '#type' => 'textarea',
-    '#description' => t('A comma seperated list of Hex colors to choose from in subject taxonomy'),
-    '#default_value' => variable_get('loop_search_links_colors'),
-  );
-
-  $form['#submit'][] = '_loop_search_links_colors_save';
-}
-
-function _loop_search_links_colors_save($form, $form_state) {
-  variable_set('loop_search_links_colors', $form_state['values']['loop_search_links_link_colors']);
-}
-
-
+/**
+ * Implements hook_block_info().
+ *
+ * Add search links block.
+ */
 function loop_search_links_block_info() {
   $blocks = array();
   $blocks['loop_search_links_block'] = array(
@@ -36,8 +20,12 @@ function loop_search_links_block_info() {
   return $blocks;
 }
 
-
-function loop_search_links_block_view($delta='') {
+/**
+ * Implements hook_block_view().
+ *
+ * Display a search links block.
+ */
+function loop_search_links_block_view($delta = '') {
   $block = array();
   $items = array();
   $name = 'subject';
@@ -49,8 +37,8 @@ function loop_search_links_block_view($delta='') {
     $items[$term->tid]['path'] = '/#/#' . urlencode('filters[taxonomy]') . '=' . urlencode(urlencode('field_subject:') . $term->name) . '&pager=0:8';
   }
 
-  switch($delta) {
-    case 'loop_search_links_block' :
+  switch ($delta) {
+    case 'loop_search_links_block':
       $variables = array('items' => $items);
       $block['content'] = theme('loop_search_links_block', $variables);
       break;
@@ -58,6 +46,11 @@ function loop_search_links_block_view($delta='') {
   return $block;
 }
 
+/**
+ * Implements hook_theme().
+ *
+ * Theme search links block.
+ */
 function loop_search_links_theme() {
   return array(
     'loop_search_links_block' => array(

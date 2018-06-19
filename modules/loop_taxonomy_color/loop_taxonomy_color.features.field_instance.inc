@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * loop_search_links.features.field_instance.inc
+ * loop_taxonomy_color.features.field_instance.inc
  */
 
 /**
  * Implements hook_field_default_field_instances().
  */
-function loop_search_links_field_default_field_instances() {
+function loop_taxonomy_color_field_default_field_instances() {
   $field_instances = array();
 
   // Exported field_instance: 'taxonomy_term-subject-field_color'.

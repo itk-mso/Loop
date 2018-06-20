@@ -280,6 +280,15 @@ projects[views_flag_refresh][version] = "1.3"
 projects[wysiwyg][subdir] = "contrib"
 projects[wysiwyg][version] = "2.4"
 
+projects[linkchecker][subdir] = "contrib"
+projects[linkchecker][version] = "1.3"
+
+projects[toc_filter][subdir] = "contrib"
+projects[toc_filter][version] = "1.3"
+
+projects[color_field][subdir] = "contrib"
+projects[color_field][version] = "1.8"
+
 ; Libraries
 libraries[angular][download][type] = "get"
 libraries[angular][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"

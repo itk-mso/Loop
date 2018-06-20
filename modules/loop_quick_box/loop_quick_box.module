@@ -12,7 +12,7 @@
  */
 function loop_quick_box_preprocess_node(&$variables) {
   if ($variables['type'] == 'loop_documents_collection' || $variables['type'] == 'loop_documents_document') {
-    if (module_exists('loop_taxonomy_color')) {
+    if (module_exists('loop_taxonomy_color') && isset($variables['field_subject']['0'])) {
       $tid = $variables['field_subject']['0']['tid'];
       $variables['quickbox_color'] = field_get_items('taxonomy_term', taxonomy_term_load($tid), 'field_color')['0']['rgb'];
     }

@@ -283,6 +283,9 @@ projects[wysiwyg][version] = "2.4"
 projects[linkchecker][subdir] = "contrib"
 projects[linkchecker][version] = "1.3"
 
+projects[linkchecker_summary_mail][subdir] = "contrib"
+projects[linkchecker_summary_mail][version] = "1.2"
+
 projects[toc_filter][subdir] = "contrib"
 projects[toc_filter][version] = "1.3"
 

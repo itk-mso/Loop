@@ -181,7 +181,7 @@ function _loop_notification_get_email_tokens() {
  * Invoke rules components when creating a new node.
  */
 function loop_notification_node_insert($node) {
-  _loop_notification_notify_users($node, 'insert');
+//  _loop_notification_notify_users($node, 'insert');
 }
 
 /**
@@ -190,7 +190,7 @@ function loop_notification_node_insert($node) {
  * Invoke rules components when updating a node.
  */
 function loop_notification_node_update($node) {
-  _loop_notification_notify_users($node, 'update');
+//  _loop_notification_notify_users($node, 'update');
 }
 
 /**
@@ -199,7 +199,7 @@ function loop_notification_node_update($node) {
  * Invoke rules components when creating a new comment.
  */
 function loop_notification_comment_insert($comment) {
-  _loop_notification_notify_users(node_load($comment->nid), 'insert', $comment);
+//  _loop_notification_notify_users(node_load($comment->nid), 'insert', $comment);
 }
 
 /**
@@ -208,7 +208,7 @@ function loop_notification_comment_insert($comment) {
  * Invoke rules components when updating a comment.
  */
 function loop_notification_comment_update($comment) {
-  _loop_notification_notify_users(node_load($comment->nid), 'update', $comment);
+//  _loop_notification_notify_users(node_load($comment->nid), 'update', $comment);
 }
 
 /**
@@ -359,6 +359,13 @@ function _loop_notification_send_notifications() {
  * Implements hook_cron().
  */
 function loop_notification_cron() {
-    // @TODO: Make sure notifications are not checked more than than once pr. hour, day or something.
-    _loop_notification_send_notifications();
+    $last_cron = variable_get('loop_notification_last_cron');
+    // @TODO: Get cron_interval from variable.
+    $cron_interval = 60;
+
+    if (is_null($last_cron) || $last_cron + $cron_interval < time()) {
+        _loop_notification_send_notifications();
+
+        variable_set('loop_notification_last_cron', time());
+    }
 }

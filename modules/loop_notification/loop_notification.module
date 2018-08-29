@@ -336,3 +336,29 @@ function _loop_notification_check_content_type($node) {
   $allowed_types = variable_get('loop_notification_content_types');
   return !empty($allowed_types[$node->type]);
 }
+
+/**
+ * Sends notifications to all users of changes to the content they subscribe to
+ * that has changed, since the last notification was sent.
+ */
+function _loop_notification_send_notifications() {
+    // @TODO:
+    // For each user
+    // Create array_of_changes
+    // If now > user.last_notfication + user.notification_interval
+    // For each content element where (
+    //     the user subscribes to AND where modification_date > user.last_notfication
+    //   )
+    //   Get list of changes
+    //   Insert in array_of_changes
+    //   Send mail to user with array_of_changes
+    //   Set user.last_notfication = now
+}
+
+/**
+ * Implements hook_cron().
+ */
+function loop_notification_cron() {
+    // @TODO: Make sure notifications are not checked more than than once pr. hour, day or something.
+    _loop_notification_send_notifications();
+}

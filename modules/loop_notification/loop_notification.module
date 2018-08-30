@@ -343,16 +343,22 @@ function _loop_notification_check_content_type($node) {
  */
 function _loop_notification_send_notifications() {
     // @TODO:
-    // For each user
-    // Create array_of_changes
-    // If now > user.last_notfication + user.notification_interval
-    // For each content element where (
-    //     the user subscribes to AND where modification_date > user.last_notfication
-    //   )
-    //   Get list of changes
-    //   Insert in array_of_changes
-    //   Send mail to user with array_of_changes
+    // Create node_changes[node]
+    // Create user_nodes[user]
+    // For each node where modification_date > loop_notification_last_cron
+    //   Add changes to node_changes[node.id]
+    //   Get users that subscribe to node
+    //   For each user that subscribes to node
+    //     If ( now > user.last_notification + user.notification_interval
+    //          AND the user subscribes to content)
+    //       Insert node.id in user_nodes[user.id]
+    // For each user in user_nodes
+    //   Create changes_to_mail
+    //   For each node in user_nodes[user.id]
+    //     Add node_changes[node.id] to changes_to_mail
+    //   Send mail to user with changes_to_mail
     //   Set user.last_notfication = now
+
 }
 
 /**

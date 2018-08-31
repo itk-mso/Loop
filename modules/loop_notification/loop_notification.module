@@ -100,6 +100,14 @@ function loop_notification_config_form($form) {
     ),
   );
 
+  $form['loop_notification_email_wrapper']['custom_tokens'] = [
+      '#markup' =>
+          '<li>' . t('@changed_nodes - Content changed since last', array('@changed_nodes' => '[loop:changed_nodes]')) . '</li>'
+      ,
+      '#prefix' => '<p><h4>' . t('Custom tokens') . '</h4><ul>',
+      '#suffix' => '</ul></p>',
+  ];
+
   $form['loop_notification_email_wrapper']['tokens'] = _loop_notification_get_email_tokens();
 
   return system_settings_form($form);
@@ -166,11 +174,14 @@ function loop_notification_comment_update($comment) {
 function loop_notification_cron() {
     $last_cron = (int) variable_get('loop_notification_last_cron');
     // @TODO: Get cron_interval from variable.
-    $cron_interval = (int) variable_get('loop_notification_evaluation_interval');
+    $cron_interval = variable_get('loop_notification_evaluation_interval');
 
     if (is_int($cron_interval)) {
         $cron_interval = 60 * 60 * 24; // Defaults to once pr. day.
     }
+
+    // @TODO: Remove this. For testing.
+
 
     if (is_null($last_cron) || $last_cron + $cron_interval < time()) {
         _loop_notification_send_notifications();
@@ -197,17 +208,9 @@ function _loop_notification_get_email_tokens() {
             'property info' => array(),
             'optional' => TRUE,
         ),
-        'node' => array(
-            'label' => 'node',
-            'type' => 'node',
-        ),
         'user' => array(
             'label' => 'user',
             'type' => 'user',
-        ),
-        'comment' => array(
-            'label' => 'comment',
-            'type' => 'comment',
         ),
     ));
 
@@ -283,7 +286,7 @@ function _loop_notification_notify_user($user, $node, $action, $author, $comment
   if ($comment) {
     if ($action == 'insert') {
       // Insert comment notification.
-      rules_invoke_component('loop_notification_send_mail', $node, $user, $comment);
+      rules_invoke_component('rules_create_notification', $user, $author, $comment);
     }
     else {
       // Update comment notification.
@@ -406,6 +409,9 @@ function _loop_notification_send_notifications() {
 
     $modified_nodes = _loop_notification_modified_nodes($loop_notification_last_cron);
 
+    $mail_template = variable_get('loop_notification_send_mail_body');
+    $mail_subject = variable_get('loop_notification_send_mail_subject');
+
     foreach ($modified_nodes as $node) {
         // @TODO: implement _loop_notification_get_node_revisions
         // $revisions = _loop_notification_get_node_revisions($node);
@@ -426,16 +432,81 @@ function _loop_notification_send_notifications() {
 
         foreach ($user_nids as $nid) {
             $node = $node_changes[$nid];
+
+            // @TODO: Differentiate between created and changed, by created date compared with $now
             $link = l($node->title, $alias = drupal_get_path_alias('node/' . $node->nid));
 
-            $changes_to_mail[] = $link;
+            $changes_to_mail[] = '<li>' . $link . '</li>';
         }
 
-        // @TODO: Send mail to user with $changes_to_mail
-        rules_invoke_component('loop_notification_send_mail', implode("<br>", $changes_to_mail));
+        $user = user_load($user_key);
+
+        $custom_tokens = [
+            '[loop:changed_nodes]' => '<ul>' . implode('', $changes_to_mail) . '</ul>'
+        ];
+
+        // Replace loop tokens.
+        $body = _loop_notification_replace_loop_tokens($mail_template, $custom_tokens);
+        $subject = _loop_notification_replace_loop_tokens($mail_subject, $custom_tokens);
+
+        // Regular token replacement.
+        $body = token_replace($body, array('user' => $user));
+        $subject = token_replace($subject, array('user' => $user));
+
+        _loop_notification_mail_send($subject, $body, $user);
 
         $last_user_notifications[$user_key] = $now;
     }
 
     variable_set('loop_notification_last_user_notifications', $last_user_notifications);
+}
+
+/**
+ * Replace  tokens.
+ *
+ * @param $text
+ *   The text to replace in.
+ * @param array $replacements
+ *   An optional array of replacements of the form:
+ *   ['custom_token' => 'replacement', ...]
+ * @return null|string|string[]
+ */
+function _loop_notification_replace_loop_tokens($text, $replacements = array()) {
+    foreach ($replacements as $key => $replacement) {
+        $text = str_replace($key, $replacement, $text);
+    }
+
+    return $text;
+}
+
+/**
+ * Send a notification mail.
+ *
+ * @param $subject
+ *   The subject.
+ * @param $message
+ *   The message.
+ * @param $to
+ *   The receiver.
+ * @param null $from
+ *   The sender.
+ */
+function _loop_notification_mail_send($subject, $message, $to, $from = NULL) {
+    $params = [
+        'subject' => $subject,
+        'body' => $message,
+    ];
+
+    $result = drupal_mail('loop_notification', 'notify', $to, user_preferred_language($to), $params, $from, TRUE);
+    if ($result['result'] != TRUE) {
+        watchdog('loop_notification', 'Mail error', array(), WATCHDOG_ERROR);
+    }
+}
+
+/**
+ * Implements hook_mail().
+ */
+function loop_notification_mail($key, &$message, $params) {
+    $message['subject'] = $params['subject'];
+    $message['body'][] = $params['body'];
 }

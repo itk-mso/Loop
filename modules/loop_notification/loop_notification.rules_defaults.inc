@@ -154,11 +154,9 @@ function loop_notification_default_rules_configuration() {
       "OWNER" : "rules",
       "REQUIRES" : [ "loop_notification", "rules", "mimemail" ],
       "USES VARIABLES" : {
-        "input": { "label" : "comment", "type" : "string" }
+        "user" : { "label" : "user", "type" : "user" },
+        "body": { "label" : "body", "type" : "text" }
       },
-      "IF" : [
-        { "NOT data_is" : { "data" : [ "user:uid" ], "value" : [ "comment:author:uid" ] } }
-      ],
       "DO" : [
         { "mimemail" : {
             "USING" : {
@@ -166,7 +164,7 @@ function loop_notification_default_rules_configuration() {
               "to" : "[user:mail]",
               "from_mail" : "[site:mail]",
               "subject" : "[loop:loop_notification_send_mail_subject]",
-              "body" : "[loop:loop_notification_send_mail_body]",
+              "body" : "[body]",
               "attachments" : [ "" ],
               "language" : [ "" ]
             },

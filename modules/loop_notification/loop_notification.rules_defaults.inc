@@ -154,9 +154,7 @@ function loop_notification_default_rules_configuration() {
       "OWNER" : "rules",
       "REQUIRES" : [ "loop_notification", "rules", "mimemail" ],
       "USES VARIABLES" : {
-        "node" : { "label" : "node", "type" : "node" },
-        "user" : { "label" : "user", "type" : "user" },
-        "comment" : { "label" : "comment", "type" : "comment" }
+        "input": { "label" : "comment", "type" : "string" }
       },
       "IF" : [
         { "NOT data_is" : { "data" : [ "user:uid" ], "value" : [ "comment:author:uid" ] } }
@@ -169,96 +167,6 @@ function loop_notification_default_rules_configuration() {
               "from_mail" : "[site:mail]",
               "subject" : "[loop:loop_notification_send_mail_subject]",
               "body" : "[loop:loop_notification_send_mail_body]",
-              "attachments" : [ "" ],
-              "language" : [ "" ]
-            },
-            "PROVIDE" : { "send_status" : { "send_status" : "Send status" } }
-          }
-        }
-      ]
-    }
-  }');
-  $items['loop_notification_send_mail_to_subscribers_on_comment_edit'] = entity_import('rules_config', '{ "loop_notification_send_mail_to_subscribers_on_comment_edit" : {
-      "LABEL" : "Send mail to subscribers on comment edit",
-      "PLUGIN" : "rule",
-      "OWNER" : "rules",
-      "REQUIRES" : [ "loop_notification", "rules", "mimemail" ],
-      "USES VARIABLES" : {
-        "node" : { "label" : "node", "type" : "node" },
-        "user" : { "label" : "user", "type" : "user" },
-        "comment" : { "label" : "comment", "type" : "comment" }
-      },
-      "IF" : [
-        { "NOT data_is" : { "data" : [ "user:uid" ], "value" : [ "comment:author:uid" ] } }
-      ],
-      "DO" : [
-        { "mimemail" : {
-            "USING" : {
-              "key" : "Mail on message creation",
-              "to" : "[user:mail]",
-              "from_mail" : "[site:mail]",
-              "subject" : "[loop:loop_notification_send_mail_to_subscribers_on_comment_edit_subject]",
-              "body" : "[loop:loop_notification_send_mail_to_subscribers_on_comment_edit_body]",
-              "attachments" : [ "" ],
-              "language" : [ "" ]
-            },
-            "PROVIDE" : { "send_status" : { "send_status" : "Send status" } }
-          }
-        }
-      ]
-    }
-  }');
-  $items['loop_notification_send_mail_to_subscribers_on_node_create'] = entity_import('rules_config', '{ "loop_notification_send_mail_to_subscribers_on_node_create" : {
-      "LABEL" : "Send mail to subscribers on node create",
-      "PLUGIN" : "rule",
-      "OWNER" : "rules",
-      "REQUIRES" : [ "loop_notification", "rules", "mimemail" ],
-      "USES VARIABLES" : {
-        "node" : { "label" : "node", "type" : "node" },
-        "user" : { "label" : "user", "type" : "user" },
-        "comment" : { "label" : "comment", "type" : "comment" }
-      },
-      "IF" : [
-        { "NOT data_is" : { "data" : [ "user:uid" ], "value" : [ "node:author:uid" ] } }
-      ],
-      "DO" : [
-        { "mimemail" : {
-            "USING" : {
-              "key" : "Mail on message creation",
-              "to" : "[user:mail]",
-              "from_mail" : "[site:mail]",
-              "subject" : "[loop:loop_notification_send_mail_to_subscribers_on_node_create_subject]",
-              "body" : "[loop:loop_notification_send_mail_to_subscribers_on_node_create_body]",
-              "attachments" : [ "" ],
-              "language" : [ "" ]
-            },
-            "PROVIDE" : { "send_status" : { "send_status" : "Send status" } }
-          }
-        }
-      ]
-    }
-  }');
-  $items['loop_notification_send_mail_to_subscribers_on_node_edit'] = entity_import('rules_config', '{ "loop_notification_send_mail_to_subscribers_on_node_edit" : {
-      "LABEL" : "Send mail to subscribers on node edit",
-      "PLUGIN" : "rule",
-      "OWNER" : "rules",
-      "REQUIRES" : [ "loop_notification", "rules", "mimemail" ],
-      "USES VARIABLES" : {
-        "node" : { "label" : "node", "type" : "node" },
-        "user" : { "label" : "user", "type" : "user" },
-        "comment" : { "label" : "comment", "type" : "comment" }
-      },
-      "IF" : [
-        { "NOT data_is" : { "data" : [ "user:uid" ], "value" : [ "node:author:uid" ] } }
-      ],
-      "DO" : [
-        { "mimemail" : {
-            "USING" : {
-              "key" : "Mail on message creation",
-              "to" : "[user:mail]",
-              "from_mail" : "[site:mail]",
-              "subject" : "[loop:loop_notification_send_mail_to_subscribers_on_node_edit_subject]",
-              "body" : "[loop:loop_notification_send_mail_to_subscribers_on_node_edit_body]",
               "attachments" : [ "" ],
               "language" : [ "" ]
             },

@@ -103,20 +103,14 @@ function loop_notification_config_form($form) {
 
   $form['loop_notification_email_wrapper']['custom_tokens'] = [
     '#markup' =>
-      '<li>' . t('@token - New questions',
-        ['@token' => '[loop:question_new]']) . '</li>' .
-      '<li>' . t('@token - Changed questions',
-        ['@token' => '[loop:question_changes]']) . '</li>' .
-      '<li>' . t('@token - New answers',
-        ['@token' => '[loop:question_new_answers]']) . '</li>' .
-      '<li>' . t('@token - New document collections',
-        ['@token' => '[loop:document_collection_new]']) . '</li>' .
-      '<li>' . t('@token - Changed document collections',
-        ['@token' => '[loop:document_collection_changes]']) . '</li>' .
-      '<li>' . t('@token - New documents',
-        ['@token' => '[loop:document_new]']) . '</li>' .
-      '<li>' . t('@token - Changed documents',
-        ['@token' => '[loop:document_changes]']) . '</li>'
+      '<li>' . t('@token - New questions', ['@token' => '[loop:question_new]']) . '</li>' .
+      '<li>' . t('@token - Changed questions', ['@token' => '[loop:question_changes]']) . '</li>' .
+      '<li>' . t('@token - New answers', ['@token' => '[loop:answer_new]']) . '</li>' .
+      '<li>' . t('@token - Changed answers', ['@token' => '[loop:answer_changes]']) . '</li>' .
+      '<li>' . t('@token - New document collections', ['@token' => '[loop:document_collection_new]']) . '</li>' .
+      '<li>' . t('@token - Changed document collections', ['@token' => '[loop:document_collection_changes]']) . '</li>' .
+      '<li>' . t('@token - New documents', ['@token' => '[loop:document_new]']) . '</li>' .
+      '<li>' . t('@token - Changed documents', ['@token' => '[loop:document_changes]']) . '</li>'
     ,
     '#prefix' => '<p><h4>' . t('Custom tokens') . '</h4><ul>',
     '#suffix' => '</ul></p>',
@@ -190,17 +184,21 @@ function loop_notification_comment_update($comment) {
  */
 function loop_notification_cron() {
   $last_cron = (int) variable_get('loop_notification_last_cron');
-  // @TODO: Get cron_interval from variable.
-  $cron_interval = variable_get('loop_notification_evaluation_interval');
+  $cron_interval = (int) variable_get('loop_notification_evaluation_interval');
 
-  if (is_int($cron_interval)) {
+  $now = time();
+
+  if (is_null($cron_interval)) {
     $cron_interval = 60 * 60 * 24; // Defaults to once pr. day.
   }
 
-  // @TODO: Remove this. For testing.
+  // Default last cron to now, to avoid sending old notifications.
+  if (is_null($last_cron)) {
+    $last_cron = $now;
+    variable_set('loop_notification_last_cron', $last_cron);
+  }
 
-
-  if (is_null($last_cron) || $last_cron + $cron_interval < time()) {
+  if ($last_cron + $cron_interval < $now) {
     _loop_notification_send_notifications();
 
     variable_set('loop_notification_last_cron', time());
@@ -355,7 +353,7 @@ function _loop_notification_check_content_type($node) {
  *   The unix timestamp from which to get modifications from.
  *
  * @return array
- *   Array of nodes that have been modified since loop_notification_last_cron.
+ *   Array of nodes that have been modified since $modification_limit.
  */
 function _loop_notification_modified_nodes($modification_limit) {
   $nodes = [];
@@ -382,124 +380,204 @@ function _loop_notification_modified_nodes($modification_limit) {
 }
 
 /**
- * Sends notifications to all users of changes to the content they subscribe to
- * that has changed, since the last notification was sent.
+ * Get all comments that where created after $loop_notification_last_cron.
+ *
+ * @param $loop_notification_last_cron
+ *   The timestamp to delimit search.
+ *
+ * @return array
  */
-function _loop_notification_send_notifications() {
-  // @TODO: Handle comments.
+function _loop_notification_new_comments($loop_notification_last_cron) {
+  $result = db_query('SELECT nid FROM {comment} WHERE created > :timestamp AND status = :status', array(
+    ':timestamp' => $loop_notification_last_cron,
+    ':status' => COMMENT_PUBLISHED,
+  ))
+    ->fetchCol();
 
-  // Algorithm:
-  // Get loop_notification_last_user_notifications
-  // Create node_changes[node]
-  // Create user_nodes[user]
-  // For each node where modification_date > loop_notification_last_cron
-  //   Add changes to node_changes[node.id]
-  //   Get users that subscribe to node
-  //   For each user that subscribes to node
-  //     If (now > loop_notification_last_user_notifications[user.id] + user.notification_interval
-  //         AND the user subscribes to content)
-  //       Insert node.id in user_nodes[user.id]
-  // For each user in user_nodes
-  //   Create changes
-  //   For each node in user_nodes[user.id]
-  //     Add node_changes[node.id] to changes
-  //   Send mail to user with changes
-  //   Set loop_notification_last_user_notifications[user.id] = now
-  // Set loop_notification_last_user_notifications = loop_notification_last_user_notifications
-  // Set loop_notification_last_cron = now
+  return array_values(array_unique($result));
+}
 
-  $loop_notification_last_cron = variable_get('loop_notification_last_cron');
-  $last_user_notifications = variable_get('loop_notification_last_user_notifications');
-  if (is_null($last_user_notifications)) {
-    $last_user_notifications = [];
+/**
+ * Get all comments that where modified (but not created) after $loop_notification_last_cron.
+ *
+ * @param $loop_notification_last_cron
+ *   The timestamp to delimit search.
+ *
+ * @return array
+ */
+function _loop_notification_modified_comments($loop_notification_last_cron) {
+  $result = db_query('SELECT nid FROM {comment} WHERE changed > :timestamp AND created < :timestamp AND status = :status', array(
+    ':timestamp' => $loop_notification_last_cron,
+    ':status' => COMMENT_PUBLISHED,
+  ))
+    ->fetchCol();
+
+  return array_values(array_unique($result));
+}
+
+/**
+ * Create a list element of the link to a node.
+ *
+ * @param $node
+ *   The node to link to.
+ *
+ * @return string
+ */
+function _loop_notification_create_list_element($node) {
+  $link = l($node->title, $alias = drupal_get_path_alias('node/' . $node->nid));
+
+  return '<li>' . $link . '</li>';
+}
+
+/**
+ * Updated the relevant arrays for handling a changes.
+ *
+ * @param $nid
+ *   The node id to add.
+ * @param $users_to_notify
+ *   The users to notify.
+ * @param $node_array
+ *   Array of nodes linked to created/changed.
+ * @param $list_array
+ *   The array of list elements.
+ * @param $timestamp
+ *   The time to compare interval overlaps with.
+ * @param $loop_notification_last_user_notifications
+ *   Array of timestamps with uid as key.
+ * @param $content_types
+ *   Array of content_types to receive notifications for.
+ */
+function _loop_notification_handle_nodes($nid, &$users_to_notify, &$node_array, &$list_array, $timestamp, $loop_notification_last_user_notifications, $content_types) {
+  $node = node_load($nid);
+
+  // Make sure notifications are activated for the given node type.
+  if (empty($content_types[$node->type]) || !$content_types[$node->type]) {
+    return;
   }
 
-  $node_changes = [];
-  $user_nodes = [];
+  $users = _loop_notification_find_users($node);
+
+  $node_array[$nid] = $node;
+
+  $list_array[$nid] = _loop_notification_create_list_element($node);
+
+  foreach ($users as $user) {
+    // Defaults to once pr. week.
+    $user_notification_interval = variable_get('loop_notification_default_interval') ?: 60 * 60 * 24 * 7;
+
+    if ($timestamp > $loop_notification_last_user_notifications[$user->id] + $user_notification_interval) {
+      $users_to_notify[$user->uid][$node->nid] = $node->nid;
+    }
+  }
+}
+
+/**
+ * Sends notifications to all users of changes to the content they subscribe to
+ * that has changed or been created, since the last notification mail was sent.
+ */
+function _loop_notification_send_notifications() {
   $now = time();
-  $user_notification_interval_default = 60; // @TODO: Change this to once pr. week.
 
-  $modified_nodes = _loop_notification_modified_nodes($loop_notification_last_cron);
+  // Get the last time notifications where sent.
+  $loop_notification_last_cron = variable_get('loop_notification_last_cron');
 
+  // Get mail templates.
   $mail_template = variable_get('loop_notification_send_mail_body');
   $mail_subject = variable_get('loop_notification_send_mail_subject');
 
-  $allowed_types = variable_get('loop_notification_content_types');
+  // Get the content types where notifications are enabled.
+  $content_types = variable_get('loop_notification_content_types');
 
+  // Get the last user notifications time.
+  $loop_notification_last_user_notifications = variable_get('loop_notification_last_user_notifications');
+  if (is_null($loop_notification_last_user_notifications)) {
+    $loop_notification_last_user_notifications = [];
+  }
+
+  $node_array = [];
+  $nodes_changed = [];
+  $nodes_created = [];
+
+  $comment_array = [];
+  $comments_changed = [];
+  $comments_created = [];
+
+  // Users that should be notified.
+  $user_nodes = [];
+
+  // Get nodes that have been created_nodes_to_send/modified since loop_notification_last_cron.
+  $modified_nodes = _loop_notification_modified_nodes($loop_notification_last_cron);
+
+  // Handle each created_nodes_to_send comment.
+  $nids_with_new_comments = _loop_notification_new_comments($loop_notification_last_cron);
+  foreach ($nids_with_new_comments as $nid) {
+    _loop_notification_handle_nodes($nid, $user_nodes, $comment_array, $comments_created, $now, $loop_notification_last_user_notifications, $content_types);
+  }
+
+  // Handle each changed_nodes_to_send comment.
+  $nids_with_modified_comments = _loop_notification_modified_comments($loop_notification_last_cron);
+  foreach ($nids_with_modified_comments as $nid) {
+    _loop_notification_handle_nodes($nid, $user_nodes, $comment_array, $comments_changed, $now, $loop_notification_last_user_notifications, $content_types);
+  }
+
+  // Handle each created_nodes_to_send/changed_nodes_to_send node.
   foreach ($modified_nodes as $node) {
-    // Make sure notifications are activated for the given node type.
-    if (empty($allowed_types[$node->type]) || !$allowed_types[$node->type]) {
-      continue;
+    // Sort by created_nodes_to_send/changed_nodes_to_send.
+    if ($node->created > $loop_notification_last_cron) {
+      _loop_notification_handle_nodes($node->nid, $user_nodes, $node_array, $nodes_created[$node->type], $now, $loop_notification_last_user_notifications, $content_types);
     }
-
-    $node_changes[$node->nid] = $node;
-
-    $node_subscribers = _loop_notification_find_users($node);
-
-    foreach ($node_subscribers as $subscriber) {
-      // @TODO: replace $user_notification_interval_default with user set value.
-      if ($now > $last_user_notifications[$subscriber->id] + $user_notification_interval_default) {
-        $user_nodes[$subscriber->uid][] = $node->nid;
-      }
+    else {
+      _loop_notification_handle_nodes($node->nid, $user_nodes, $node_array, $nodes_changed[$node->type], $now, $loop_notification_last_user_notifications, $content_types);
     }
   }
 
+  // Create notification mail to each user that have notifications waiting.
   foreach ($user_nodes as $user_key => $user_nids) {
-    $changed = [];
-    $created = [];
+    $changed_nodes_to_send = [];
+    $created_nodes_to_send = [];
+    $created_comments_to_send = [];
+    $changed_comments_to_send = [];
 
+    // Extract changes to user.
     foreach ($user_nids as $nid) {
-      $node = $node_changes[$nid];
+      $node = $node_array[$nid];
 
-      // @TODO: Move these up to avoid calculating more than once.
-
-      $type = $node->type;
-
-      // Sort by created/changed.
-      $node_created = FALSE;
-
-      // Differentiate between created and changed.
-      if ($node->created > $loop_notification_last_cron) {
-        $node_created = TRUE;
+      if (isset($nodes_changed[$node->type][$nid])) {
+        $changed_nodes_to_send[$node->type][] = $nodes_changed[$node->type][$nid];
+      }
+      else if (isset($nodes_created[$node->type][$nid])) {
+        $created_nodes_to_send[$node->type][] = $nodes_created[$node->type][$nid];
       }
 
-      // Create link to node.
-      $link = l($node->title,
-        $alias = drupal_get_path_alias('node/' . $node->nid));
-
-      if ($node_created) {
-        $created[$type][$nid] = '<li>' . $link . '</li>';
+      if (in_array($nid, $nids_with_new_comments)) {
+        $created_comments_to_send[] = $comments_created[$nid];
       }
-      else {
-        $changed[$type][$nid] = '<li>' . $link . '</li>';
+
+      if (in_array($nid, $nids_with_modified_comments)) {
+        $changed_comments_to_send[] = $comments_changed[$nid];
       }
     }
 
-    $user = user_load($user_key);
-
     $custom_tokens = [
-      '[loop:question_new_answers]' => '@TODO',
-      '[loop:question_new]' => '<ul>' . implode('', $created['post']) . '</ul>',
-      '[loop:question_changes]' => '<ul>' . implode('',
-          $changed['post']) . '</ul>',
-      '[loop:document_collection_new]' => '<ul>' . implode('',
-          $created['loop_documents_collection']) . '</ul>',
-      '[loop:document_collection_changes]' => '<ul>' . implode('',
-          $changed['loop_documents_collection']) . '</ul>',
-      '[loop:document_new]' => '<ul>' . implode('',
-          $created['loop_documents_document']) . '</ul>',
-      '[loop:document_changes]' => '<ul>' . implode('',
-          $changed['loop_documents_document']) . '</ul>',
+      '[loop:answer_new]' => '<ul>' . implode('', $created_comments_to_send) . '</ul>',
+      '[loop:answer_changes]' => '<ul>' . implode('', $changed_comments_to_send) . '</ul>',
+      '[loop:question_new]' => '<ul>' . implode('', $created_nodes_to_send['post']) . '</ul>',
+      '[loop:question_changes]' => '<ul>' . implode('', $changed_nodes_to_send['post']) . '</ul>',
+      '[loop:document_collection_new]' => '<ul>' . implode('', $created_nodes_to_send['loop_documents_collection']) . '</ul>',
+      '[loop:document_collection_changes]' => '<ul>' . implode('', $changed_nodes_to_send['loop_documents_collection']) . '</ul>',
+      '[loop:document_new]' => '<ul>' . implode('', $created_nodes_to_send['loop_documents_document']) . '</ul>',
+      '[loop:document_changes]' => '<ul>' . implode('', $changed_nodes_to_send['loop_documents_document']) . '</ul>',
     ];
 
     // Replace end of lines.
     $mail_template = str_replace(["\r\n", "\r", "\n"], '<br/>', $mail_template);
 
     // Replace loop tokens.
-    $body = _loop_notification_replace_loop_tokens($mail_template,
-      $custom_tokens);
-    $subject = _loop_notification_replace_loop_tokens($mail_subject,
-      $custom_tokens);
+    $body = _loop_notification_replace_loop_tokens($mail_template, $custom_tokens);
+    $subject = _loop_notification_replace_loop_tokens($mail_subject, $custom_tokens);
+
+    // Load the user.
+    $user = user_load($user_key);
 
     // Regular token replacement.
     $body = token_replace($body, ['user' => $user]);
@@ -507,11 +585,12 @@ function _loop_notification_send_notifications() {
 
     _loop_notification_mail_send($subject, $body, $user);
 
-    $last_user_notifications[$user_key] = $now;
+    // Update the time when the user has last received notifications.
+    $loop_notification_last_user_notifications[$user_key] = $now;
   }
 
   variable_set('loop_notification_last_user_notifications',
-    $last_user_notifications);
+    $loop_notification_last_user_notifications);
 }
 
 /**

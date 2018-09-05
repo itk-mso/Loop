@@ -148,32 +148,6 @@ function loop_notification_default_rules_configuration() {
       ]
     }
   }');
-  $items['loop_notification_send_mail'] = entity_import('rules_config', '{ "loop_notification_send_mail" : {
-      "LABEL" : "Send mail to subscribers",
-      "PLUGIN" : "rule",
-      "OWNER" : "rules",
-      "REQUIRES" : [ "loop_notification", "rules", "mimemail" ],
-      "USES VARIABLES" : {
-        "user" : { "label" : "user", "type" : "user" },
-        "body": { "label" : "body", "type" : "text" }
-      },
-      "DO" : [
-        { "mimemail" : {
-            "USING" : {
-              "key" : "Mail on message creation",
-              "to" : "[user:mail]",
-              "from_mail" : "[site:mail]",
-              "subject" : "[loop:loop_notification_send_mail_subject]",
-              "body" : "[body]",
-              "attachments" : [ "" ],
-              "language" : [ "" ]
-            },
-            "PROVIDE" : { "send_status" : { "send_status" : "Send status" } }
-          }
-        }
-      ]
-    }
-  }');
   $items['rules_autosubscribe_node_post_author'] = entity_import('rules_config', '{ "rules_autosubscribe_node_post_author" : {
       "LABEL" : "Autosubscribe node post author",
       "PLUGIN" : "reaction rule",

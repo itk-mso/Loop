@@ -23,7 +23,110 @@ function loop_notification_menu() {
     'access arguments' => ['access administration pages'],
   ];
 
+  /*
+  $items['user/%user/notification_settings'] = array(
+    'title' => 'Example Form',
+    'description' => 'A form to mess around with.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array(arg(1), 'loop_notification_user_form'),
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => TRUE
+  );
+  */
+
   return $items;
+}
+
+/**
+ * Implements hook_form().
+ *
+ * A form for managing a user's notification settings.
+ */
+function loop_notification_user_form($form, &$form_state) {
+  $current_user_id = $GLOBALS['user']->uid;
+
+  $query = db_query("SELECT * FROM {loop_notification_user_settings} WHERE uid = :uid", array('uid' => $current_user_id));
+  $record = $query->fetchObject();
+
+  $form['loop_notification_enable_notifications'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Enable notification'),
+    '#description' => t('Enable to receive an email with notification updates.'),
+    '#default_value' => $record->enabled ?: 0,
+  ];
+
+  $updateIntervals = array(60 * 60 * 24 => t('Once per day'), 60 * 60 * 24 * 7 => t('Once per week'));
+  $form['loop_notification_notification_interval'] = [
+    '#type' => 'radios',
+    '#title' => t('Notification interval'),
+    '#default_value' => $record->update_interval ?: 60 * 60 * 24 * 7,
+    '#options' => $updateIntervals,
+    '#description' => t('Choose how often you want to receive notifications.'),
+    '#access' => TRUE,
+  ];
+
+  $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save notification settings'),
+  );
+
+  return $form;
+}
+
+/**
+ * Validation for user's notification settings form.
+ *
+ * @param $form
+ *   The form.
+ *
+ * @param $form_state
+ *   The form state.
+ */
+function loop_notification_user_form_validate($form, &$form_state) {
+  if (!($form_state['values']['loop_notification_notification_interval'] > 0)){
+    form_set_error('loop_notification_notification_interval', t('Notification interval must be higher than 0.'));
+  }
+}
+
+function loop_notification_user_form_submit($form, &$form_state) {
+  $current_user_id = $GLOBALS['user']->uid;
+
+  db_merge('loop_notification_user_settings')
+    ->key(array('uid' => $current_user_id))
+    ->fields(array(
+      'enabled' => $form_state['values']['loop_notification_enable_notifications'],
+      'update_interval' => $form_state['values']['loop_notification_notification_interval'],
+    ))
+    ->execute();
+}
+
+/**
+ * Implements hook_block_info().
+ *
+ * @return mixed
+ */
+function loop_notification_block_info() {
+  $blocks['loop_notification_settings_block'] = array(
+    'info' => t('Loop notification user settings block'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function loop_notification_block_view($delta = '') {
+  // This example is adapted from node.module.
+  $block = array();
+
+  switch ($delta) {
+    case 'loop_notification_settings_block':
+      $block['subject'] = t('Loop notification user settings');
+      $block['content'] = drupal_render(drupal_get_form('loop_notification_user_form'));
+      break;
+  }
+  return $block;
 }
 
 /**
@@ -447,7 +550,7 @@ function _loop_notification_create_list_element($node) {
  * @param $content_types
  *   Array of content_types to receive notifications for.
  */
-function _loop_notification_handle_nodes($nid, &$users_to_notify, &$node_array, &$list_array, $timestamp, $loop_notification_last_user_notifications, $content_types) {
+function _loop_notification_handle_nodes($nid, &$users_to_notify, &$node_array, &$list_array, $timestamp, $loop_notification_last_user_notifications, $content_types, $user_notification_settings) {
   $node = node_load($nid);
 
   // Make sure notifications are activated for the given node type.
@@ -462,8 +565,14 @@ function _loop_notification_handle_nodes($nid, &$users_to_notify, &$node_array, 
   $list_array[$nid] = _loop_notification_create_list_element($node);
 
   foreach ($users as $user) {
+    if (!$user_notification_settings[$user->uid]->enabled) {
+      continue;
+    }
+
     // Defaults to once pr. week.
-    $user_notification_interval = variable_get('loop_notification_default_interval') ?: 60 * 60 * 24 * 7;
+    if (isset($user_notification_settings[$user->uid])) {
+      $user_notification_interval = isset($user_notification_settings[$user->uid]->update_interval) ? (int) $user_notification_settings[$user->uid]->update_interval : (variable_get('loop_notification_default_interval') ?: 60 * 60 * 24 * 7);
+    }
 
     if ($timestamp > $loop_notification_last_user_notifications[$user->id] + $user_notification_interval) {
       $users_to_notify[$user->uid][$node->nid] = $node->nid;
@@ -477,6 +586,9 @@ function _loop_notification_handle_nodes($nid, &$users_to_notify, &$node_array, 
  */
 function _loop_notification_send_notifications() {
   $now = time();
+
+  $query = db_query("SELECT * FROM {loop_notification_user_settings}");
+  $user_notification_settings = $query->fetchAllAssoc('uid');
 
   // Get the last time notifications where sent.
   $loop_notification_last_cron = variable_get('loop_notification_last_cron');
@@ -505,29 +617,27 @@ function _loop_notification_send_notifications() {
   // Users that should be notified.
   $user_nodes = [];
 
-  // Get nodes that have been created_nodes_to_send/modified since loop_notification_last_cron.
-  $modified_nodes = _loop_notification_modified_nodes($loop_notification_last_cron);
-
   // Handle each created_nodes_to_send comment.
   $nids_with_new_comments = _loop_notification_new_comments($loop_notification_last_cron);
   foreach ($nids_with_new_comments as $nid) {
-    _loop_notification_handle_nodes($nid, $user_nodes, $comment_array, $comments_created, $now, $loop_notification_last_user_notifications, $content_types);
+    _loop_notification_handle_nodes($nid, $user_nodes, $comment_array, $comments_created, $now, $loop_notification_last_user_notifications, $content_types, $user_notification_settings);
   }
 
   // Handle each changed_nodes_to_send comment.
   $nids_with_modified_comments = _loop_notification_modified_comments($loop_notification_last_cron);
   foreach ($nids_with_modified_comments as $nid) {
-    _loop_notification_handle_nodes($nid, $user_nodes, $comment_array, $comments_changed, $now, $loop_notification_last_user_notifications, $content_types);
+    _loop_notification_handle_nodes($nid, $user_nodes, $comment_array, $comments_changed, $now, $loop_notification_last_user_notifications, $content_types, $user_notification_settings);
   }
 
   // Handle each created_nodes_to_send/changed_nodes_to_send node.
+  $modified_nodes = _loop_notification_modified_nodes($loop_notification_last_cron);
   foreach ($modified_nodes as $node) {
     // Sort by created_nodes_to_send/changed_nodes_to_send.
     if ($node->created > $loop_notification_last_cron) {
-      _loop_notification_handle_nodes($node->nid, $user_nodes, $node_array, $nodes_created[$node->type], $now, $loop_notification_last_user_notifications, $content_types);
+      _loop_notification_handle_nodes($node->nid, $user_nodes, $node_array, $nodes_created[$node->type], $now, $loop_notification_last_user_notifications, $content_types, $user_notification_settings);
     }
     else {
-      _loop_notification_handle_nodes($node->nid, $user_nodes, $node_array, $nodes_changed[$node->type], $now, $loop_notification_last_user_notifications, $content_types);
+      _loop_notification_handle_nodes($node->nid, $user_nodes, $node_array, $nodes_changed[$node->type], $now, $loop_notification_last_user_notifications, $content_types, $user_notification_settings);
     }
   }
 

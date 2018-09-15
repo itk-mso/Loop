@@ -25,7 +25,10 @@ function loop_post_wysiwyg_form_node_form_alter(&$form, &$form_state) {
  * $form['comment_body'][LANGUAGE_NONE][0]['#wysiwyg'] to FALSE.
  */
 function loop_post_wysiwyg_form_comment_form_alter(&$form) {
-  $GLOBALS['use_wysiwyg_comments'] = $form['comment_body'][LANGUAGE_NONE][0]['#wysiwyg'] = TRUE;
+  if ($form['#node']->type == 'post') {
+    $form['comment_body'][LANGUAGE_NONE][0]['#wysiwyg'] = TRUE;
+    $form['comment_body'][LANGUAGE_NONE][0]['#format'] = 'editor';
+  }
 }
 
 /**

@@ -41,8 +41,7 @@ function loop_search_links_block_view($delta = '') {
     case 'loop_search_links_block':
       $variables = array('items' => $items);
       $block['content'] = theme('loop_search_links_block', $variables);
-      drupal_add_js('misc/form.js');
-      drupal_add_js('misc/collapse.js');
+      drupal_add_js(drupal_get_path('module', 'loop_search_links') . '/js/loop_toggle_links.js');
       break;
   }
   return $block;

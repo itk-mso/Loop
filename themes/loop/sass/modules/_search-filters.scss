@@ -222,6 +222,26 @@
   overflow: hidden;
   margin-bottom: 1.5em;
 
+  &--wrapper {
+    background: $gray-lightest;
+    border-radius: 0;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-height: 3em;
+
+    legend {
+      position: absolute;
+      right: 0;
+      top: 10px;
+    }
+
+    .fieldset-legend {
+      font-size: 1em;
+      padding-right: 1em;
+    }
+  }
+
   .search-filter--label {
     padding: 0 1em;
   }

@@ -286,9 +286,6 @@ projects[linkchecker][version] = "1.3"
 projects[linkchecker_summary_mail][subdir] = "contrib"
 projects[linkchecker_summary_mail][version] = "1.2"
 
-projects[toc_filter][subdir] = "contrib"
-projects[toc_filter][version] = "1.3"
-
 projects[color_field][subdir] = "contrib"
 projects[color_field][version] = "1.8"
 

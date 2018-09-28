@@ -10,8 +10,10 @@
   $(document).ready(function($) {
     let $links = $('.search-filter--links');
     let $delegate = $('.typeahead-block--wrapper');
-    let $searchFilterLink = $('.search-filter--link');
 
+    if (window.location.hash) {
+      $links.toggleClass('open');
+    }
 
     $('.js-toggle-links').click(function () {
       $links.toggleClass('open');
@@ -22,9 +24,6 @@
     $delegate.click(function (e) {
       let target = $(e.target) || $(e.srcElement);
       if (target.hasClass('search-box-block--button')) {
-        $links.removeClass('open');
-      }
-      if (target.hasClass('search-filter--link')) {
         $links.removeClass('open');
       }
     });

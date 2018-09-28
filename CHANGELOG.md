@@ -1,5 +1,9 @@
 # Loop Changelog
 
+## Loop 1.8.7
+* SUPPORT-1770: Removed site name variales and menu expanded config form code
+* SUPPORT-1769: Changed view   permissions for document authors
+
 ## Loop 1.8.0
 * Rebooted changelog
 * LOOP-519: Grouped menu items

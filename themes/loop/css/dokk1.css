@@ -3773,7 +3773,7 @@ a.question--term {
     .search-filter--links--wrapper .fieldset-legend, .search-filter--links--wrapper .user-profile-module--fieldset-legend {
       font-size: 1em;
       padding-right: 1em;
-      color: #04bfbf;
+      color: #003764;
       cursor: pointer;
       text-decoration: underline; }
     .search-filter--links--wrapper .search-filter--links {
@@ -4784,6 +4784,8 @@ a.question--term.taxonomy-keyword {
     right: 0; }
   .quickbox--inner {
     position: relative; }
+  .quickbox table {
+    table-layout: fixed; }
 
 /**
  * Active Tags module

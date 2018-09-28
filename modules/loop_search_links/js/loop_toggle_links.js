@@ -11,6 +11,7 @@
     let $links = $('.search-filter--links');
     let $delegate = $('.typeahead-block--wrapper');
 
+
     $('.js-toggle-links').click(function () {
       $links.toggleClass('open');
     });

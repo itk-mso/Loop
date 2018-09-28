@@ -1,5 +1,8 @@
 # Loop Changelog
 
+## Loop 1.8.9
+* LOOP-612: Added pagebottom region
+
 ## Loop 1.8.8
 * LOOP-611: Changed tag display
 

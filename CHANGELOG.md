@@ -1,5 +1,15 @@
 # Loop Changelog
 
+## Loop 1.8.9
+* LOOP-612: Added pagebottom region
+
+## Loop 1.8.8
+* LOOP-611: Changed tag display
+
+## Loop 1.8.7
+* SUPPORT-1770: Removed site name variales and menu expanded config form code
+* SUPPORT-1769: Changed view   permissions for document authors
+
 ## Loop 1.8.1
 * LOOP-555: Added loop_disable_post module
 * Cleaned up code documentation

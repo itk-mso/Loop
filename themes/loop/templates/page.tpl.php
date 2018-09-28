@@ -213,6 +213,14 @@ if (isset($primary_menu_block['content'])): ?>
   <?php print render($page['content']); ?>
 <?php endif;?>
 
+<?php if (!empty($page['pagebottom'])): ?>
+  <div class="section">
+    <div class="layout-default block-module">
+      <?php print render($page['pagebottom']); ?>
+    </div>
+  </div>
+<?php endif; ?>
+
 <footer class="footer">
   <div class="section">
     <?php print render($page['footer']); ?>

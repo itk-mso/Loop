@@ -699,12 +699,6 @@ function loop_form_comment_form_alter(&$form) {
 
   $form['#prefix'] = theme('comment_form_prefix', $variables);
   $form['#prefix'] .= '<div class="form-module">';
-  // Let modules set a global variable to influence the use of wysiwyg
-  // comments, but default to FALSE.
-  $form['comment_body'][LANGUAGE_NONE][0]['#wysiwyg']
-    = array_key_exists('use_wysiwyg_comments', $GLOBALS)
-    ? $GLOBALS['use_wysiwyg_comments']
-    : FALSE;
   $form['#suffix'] = '</div>';
 
   hide($form['author']);

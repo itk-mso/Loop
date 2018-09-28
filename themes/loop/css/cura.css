@@ -3940,11 +3940,11 @@ a.question--term {
   font-size: .85em; }
 
 a.question--term.taxonomy-keyword {
-  background-color: #44c8f5;
-  /* setting:keyword_background_color */ }
-  a.question--term.taxonomy-keyword:hover {
-    background-color: #0caae0;
-    /* setting:keyword_hover_background_color */ }
+  background-color: #fff;
+  border-color: #314b6d;
+  /* setting:header_color */
+  border-style: solid;
+  border-width: 1px; }
 
 /**
  * Twitter typeahead

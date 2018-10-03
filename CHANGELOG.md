@@ -1,5 +1,12 @@
 # Loop Changelog
 
+## Loop 1.8.10
+* LOOP-589: Added Loop disable post
+* LOOP-589: Added Search links
+* LOOP-589: Added Quick box
+* LOOP-589: Link checker summary mail
+* LOOP-589: TOC-filter
+
 ## Loop 1.8.9
 * LOOP-612: Added pagebottom region
 

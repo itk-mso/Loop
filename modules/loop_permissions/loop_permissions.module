@@ -76,6 +76,7 @@ function loop_permissions_secure_permissions($role) {
     'administrator' => array(
       'access administration pages',
       'access all views',
+      'access broken links report',
       'access content overview',
       'access contextual links',
       'access own authorizations',

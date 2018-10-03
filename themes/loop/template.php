@@ -23,6 +23,10 @@ function loop_preprocess_page(&$variables) {
     else {
       $variables['search'] = module_invoke('search', 'block_view', 'form');
     }
+    // Apply search links if module is active.
+    if (module_exists('loop_search_links')) {
+      $variables['search_links'] = module_invoke('loop_search_links', 'block_view', 'loop_search_links_block');
+    }
   }
 
   // Drupal core got a minor bug with active trail on 'My account'.
@@ -631,12 +635,9 @@ function loop_form_user_register_form_alter(&$form) {
   $field_profession_lang = $form['field_profession']['#language'];
   $form['field_profession'][$field_profession_lang]['#attributes']['class'][] = 'js-chosen-select-profession';
 
-
   // Set page title.
-  //drupal_set_title(t("Create user"));
+  // drupal_set_title(t("Create user"));.
 }
-
-
 
 /**
  * Implements hook_form_FORM_alter().

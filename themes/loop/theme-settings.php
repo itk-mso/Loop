@@ -33,6 +33,7 @@ function loop_form_system_theme_settings_alter(&$form, &$form_state) {
       'cura' => t('Cura'),
       'buloop' => t('Børn og Unge'),
       'risikataloop' => t('Risikataloop'),
+      'emnemodul' => t('Emnemodul'),
       'dokk1' => t('Dokk1'),
     ),
     '#default_value' => theme_get_setting('loop_skin'),

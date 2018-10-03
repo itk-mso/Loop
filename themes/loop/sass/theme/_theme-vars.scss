@@ -82,3 +82,11 @@ $border-color:        $gray-lighter;
     left: 0;
   }
 }
+
+
+/* Helper classes
+   ================================================================================================================== */
+.no-horizontal-padding {
+  padding-left: 0!important;
+  padding-right: 0!important;
+}

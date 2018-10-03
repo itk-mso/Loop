@@ -1,0 +1,12 @@
+name = Loop quick box
+description = Provides quickbox field for documents and document collections
+core = 7.x
+package = Loop
+dependencies[] = features
+dependencies[] = loop_documents
+dependencies[] = loop_taxonomy_color
+dependencies[] = text
+features[features_api][] = api:2
+features[field_base][] = field_quickbox
+features[field_instance][] = node-loop_documents_collection-field_quickbox
+features[field_instance][] = node-loop_documents_document-field_quickbox

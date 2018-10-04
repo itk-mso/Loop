@@ -1,5 +1,8 @@
 # Loop Changelog
 
+## Loop 1.8.11
+* LOOP-615: Changed encoding of search links
+
 ## Loop 1.8.10
 * LOOP-589: Added Loop disable post
 * LOOP-589: Added Search links

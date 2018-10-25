@@ -1,0 +1,16 @@
+.loop-documents-collection-content {
+  .loop-documents-edit-menu {
+    float: right;
+  }
+
+  .form-item-document input[type=text] {
+    display: inline-block;
+    width: auto;
+  }
+}
+
+/* This is a hack – but it works! */
+#edit-field-quickbox .filter-wrapper,
+#edit-body .filter-wrapper {
+  display: none;
+}

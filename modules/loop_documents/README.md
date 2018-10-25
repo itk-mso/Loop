@@ -42,3 +42,17 @@ drush php-eval 'node_access_rebuild();'
 A few setting are available on the configuration page
 *Administration » Configuration » Content authoring »
 Loop documents settings* (/admin/config/content/loop_documents)
+
+# Development
+
+Building CSS assets:
+
+```
+npm install
+gulp build
+```
+
+During development, run
+```
+gulp watch
+```

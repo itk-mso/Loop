@@ -111,7 +111,7 @@ projects[mailsystem][subdir] = "contrib"
 projects[mailsystem][version] = "2.34"
 
 projects[media][subdir] = "contrib"
-projects[media][version] = "2.4"
+projects[media][version] = "2.20"
 
 projects[menu_admin_per_menu][subdir] = "contrib"
 projects[menu_admin_per_menu][version] = "1.1"
@@ -144,7 +144,7 @@ projects[message_subscribe][subdir] = "contrib"
 projects[message_subscribe][version] = "1.0-rc2"
 
 projects[mimemail][subdir] = "contrib"
-projects[mimemail][version] = "1.0"
+projects[mimemail][version] = "1.1"
 
 projects[module_filter][subdir] = "contrib"
 projects[module_filter][version] = "2.0"
@@ -201,7 +201,7 @@ projects[search_api_page][subdir] = "contrib"
 projects[search_api_page][version] = "1.3"
 
 projects[search_api_solr][subdir] = "contrib"
-projects[search_api_solr][version] = "1.12"
+projects[search_api_solr][version] = "1.14"
 
 projects[search_api_spellcheck][subdir] = "contrib"
 projects[search_api_spellcheck][version] = "1.0"
@@ -253,7 +253,7 @@ projects[transliteration][subdir] = "contrib"
 projects[transliteration][version] = "3.2"
 
 projects[uuid][subdir] = "contrib"
-projects[uuid][version] = "1.0"
+projects[uuid][version] = "1.2"
 
 projects[uuid_features][subdir] = "contrib"
 projects[uuid_features][version] = "1.0-rc1"
@@ -279,6 +279,15 @@ projects[views_flag_refresh][version] = "1.3"
 
 projects[wysiwyg][subdir] = "contrib"
 projects[wysiwyg][version] = "2.4"
+
+projects[linkchecker][subdir] = "contrib"
+projects[linkchecker][version] = "1.3"
+
+projects[linkchecker_summary_mail][subdir] = "contrib"
+projects[linkchecker_summary_mail][version] = "1.2"
+
+projects[color_field][subdir] = "contrib"
+projects[color_field][version] = "1.8"
 
 ; Libraries
 libraries[angular][download][type] = "get"

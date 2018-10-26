@@ -45,7 +45,7 @@
       'version' => 'field_loop_documents_version',
       'approver' => 'field_loop_documents_approver',
       'approval_date' => 'field_loop_documents_approv_date',
-      'review_date' => 'field_loop_documents_review_date',
+      'revision_date' => 'field_revision_date',
       'keyword' => 'field_keyword',
       'subject' => 'field_subject',
     ));
@@ -75,8 +75,8 @@
       <div class="item"><!-- @author --></div>
 
       <div class="item">
-        <div class="label"><?php echo t('Review date') ?></div>
-        <div class="value"><?php echo $metadata_values['review_date']; ?></div>
+        <div class="label"><?php echo t('Revision date') ?></div>
+        <div class="value"><?php echo $metadata_values['revision_date']; ?></div>
       </div>
     </div>
   </body>

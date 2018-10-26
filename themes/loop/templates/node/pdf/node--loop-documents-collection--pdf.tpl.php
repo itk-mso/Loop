@@ -19,6 +19,7 @@
       hide($content['documents']);
       hide($content['field_keyword']);
       hide($content['field_subject']);
+      hide($content['field_revision_date']);
       print render($content);
       ?>
     </div>

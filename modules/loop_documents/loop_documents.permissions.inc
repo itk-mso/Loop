@@ -52,6 +52,7 @@ function loop_documents_secure_permissions($role) {
       'create files',
       'create loop_documents_document content',
       'edit own loop_documents_document content',
+      'view any unpublished loop_documents_document content',
       'download any image files',
       'use media wysiwyg',
       'use text format loop_documents',

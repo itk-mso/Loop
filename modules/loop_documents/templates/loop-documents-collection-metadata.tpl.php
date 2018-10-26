@@ -14,7 +14,7 @@ $metadata_values = array_map(function ($field_name) use ($collection) {
   'version' => 'field_loop_documents_version',
   'approver' => 'field_loop_documents_approver',
   'approval_date' => 'field_loop_documents_approv_date',
-  'review_date' => 'field_loop_documents_review_date',
+  'revision_date' => 'field_revision_date',
   'keyword' => 'field_keyword',
   'subject' => 'field_subject',
 ));
@@ -50,9 +50,9 @@ $metadata_values = array_map(function ($field_name) use ($collection) {
 
     <div class="loop-documents--collection-metadata">
       <p class="loop-documents--meta-title">
-        <?php echo t('Review date') ?>
+        <?php echo t('Revision date') ?>
       </p>
-      <?php echo $metadata_values['review_date']; ?>
+      <?php echo $metadata_values['revision_date']; ?>
     </div>
 
     <div class="loop-documents--collection-metadata">

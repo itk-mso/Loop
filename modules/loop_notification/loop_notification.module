@@ -646,7 +646,7 @@ function _loop_notification_send_notifications() {
       }
     }
 
-    $custom_tokens = [
+    $loop_notification_tokens = [
       'answer_new' => '<ul>' . implode('', $created_comments_to_send) . '</ul>',
       'answer_changes' => '<ul>' . implode('', $changed_comments_to_send) . '</ul>',
       'question_new' => '<ul>' . implode('', $created_nodes_to_send['post']) . '</ul>',
@@ -658,14 +658,29 @@ function _loop_notification_send_notifications() {
     ];
 
     // Replace end of lines.
-    $mail_template = str_replace(["\r\n", "\r", "\n"], '<br/>', $mail_template);
+//    $mail_template = str_replace(["\r\n", "\r", "\n"], '<br/>', $mail_template);
 
     // Load the user.
     $user = user_load($user_key);
 
+    $if_tokens = [
+      'answer_new' => count($created_comments_to_send) > 0,
+      'answer_changes' => count($changed_comments_to_send) > 0,
+      'question_new' => count($created_nodes_to_send['post']) > 0,
+      'question_changes' => count($changed_nodes_to_send['post']) > 0,
+      'document_collection_new' => count($created_nodes_to_send['loop_documents_collection']) > 0,
+      'document_collection_changes' => count($changed_nodes_to_send['loop_documents_collection']) > 0,
+      'document_new' => count($created_nodes_to_send['loop_documents_document']) > 0,
+      'document_changes' => count($changed_nodes_to_send['loop_documents_document']) > 0,
+    ];
+
+    // Replace loop if tokens.
+    $body = _loop_notification_replace_loop_tokens($mail_template, $if_tokens);
+    $subject = _loop_notification_replace_loop_tokens($mail_subject, $if_tokens);
+
     // Trigger token replacements with loop_notification data.
-    $body = token_replace($mail_template, ['user' => $user, 'loop_notification' => $custom_tokens]);
-    $subject = token_replace($mail_subject, ['user' => $user, 'loop_notification' => $custom_tokens]);
+    $body = token_replace($body, ['user' => $user, 'loop_notification' => $loop_notification_tokens]);
+    $subject = token_replace($subject, ['user' => $user, 'loop_notification' => $loop_notification_tokens]);
 
     _loop_notification_mail_send($subject, $body, $user);
 
@@ -678,19 +693,30 @@ function _loop_notification_send_notifications() {
 }
 
 /**
- * Replace  tokens.
+ * Replace if tokens.
  *
  * @param $text
  *   The text to replace in.
- * @param array $replacements
- *   An optional array of replacements of the form:
- *   ['custom_token' => 'replacement', ...]
  *
  * @return null|string|string[]
  */
-function _loop_notification_replace_loop_tokens($text, $replacements = []) {
-  foreach ($replacements as $key => $replacement) {
-    $text = str_replace($key, $replacement, $text);
+function _loop_notification_replace_loop_tokens($text, $if_tokens) {
+  foreach ($if_tokens as $key => $show_if) {
+    $start_token = '[loop-notification:if_' . $key . ']';
+    $end_token = '[loop-notification:endif_' . $key . ']';
+
+    if ($show_if) {
+      $text = str_replace($start_token, '', $text);
+      $text = str_replace($end_token, '', $text);
+    }
+    else {
+      $index_start_token = strpos($text, $start_token);
+      $index_end_token = strpos($text, $end_token);
+
+      if ($index_start_token !== FALSE && $index_end_token !== FALSE) {
+        $text = substr($text, 0, $index_start_token) . substr($text, $index_end_token + strlen($end_token), strlen($text));
+      }
+    }
   }
 
   return $text;
@@ -771,6 +797,74 @@ function loop_notification_token_info() {
   $info['tokens']['loop_notification']['document_changes'] = [
     'name' => t('Changed documents'),
     'description' => t("Changed documents."),
+  ];
+
+  $info['tokens']['loop_notification']['if_answer_new'] = [
+    'name' => t('If answer new start token'),
+    'description' => t("If answer new start token. Set at start of if-token block.")
+  ];
+  $info['tokens']['loop_notification']['endif_answer_new'] = [
+    'name' => t('If answer new end token'),
+    'description' => t("If answer new end token. Set at end of if-token block.")
+  ];
+  $info['tokens']['loop_notification']['if_answer_changes'] = [
+    'name' => t('If answer changes start token'),
+    'description' => t("If answer new start token. Set at start of if-token block.")
+  ];
+  $info['tokens']['loop_notification']['endif_answer_changes'] = [
+    'name' => t('If answer changes end token'),
+    'description' => t("If answer new end token. Set at end of if-token block.")
+  ];
+
+  $info['tokens']['loop_notification']['if_question_new'] = [
+    'name' => t('If question new start token'),
+    'description' => t("If question new start token. Set at start of if-token block.")
+  ];
+  $info['tokens']['loop_notification']['endif_question_new'] = [
+    'name' => t('If question new end token'),
+    'description' => t("If question new end token. Set at end of if-token block.")
+  ];
+  $info['tokens']['loop_notification']['if_question_changes'] = [
+    'name' => t('If question changes start token'),
+    'description' => t("If question new start token. Set at start of if-token block.")
+  ];
+  $info['tokens']['loop_notification']['endif_question_changes'] = [
+    'name' => t('If question changes end token'),
+    'description' => t("If question new end token. Set at end of if-token block.")
+  ];
+
+  $info['tokens']['loop_notification']['if_document_collection_new'] = [
+    'name' => t('If document collection new start token'),
+    'description' => t("If document collection new start token. Set at start of if-token block.")
+  ];
+  $info['tokens']['loop_notification']['endif_document_collection_new'] = [
+    'name' => t('If document collection new end token'),
+    'description' => t("If document collection new end token. Set at end of if-token block.")
+  ];
+  $info['tokens']['loop_notification']['if_document_collection_changes'] = [
+    'name' => t('If document collection changes start token'),
+    'description' => t("If document collection changes start token. Set at start of if-token block.")
+  ];
+  $info['tokens']['loop_notification']['endif_document_collection_changes'] = [
+    'name' => t('If document collection changes end token'),
+    'description' => t("If document collection changes end token. Set at end of if-token block.")
+  ];
+
+  $info['tokens']['loop_notification']['if_document_new'] = [
+    'name' => t('If document new start token'),
+    'description' => t("If document  new start token. Set at start of if-token block.")
+  ];
+  $info['tokens']['loop_notification']['endif_document_new'] = [
+    'name' => t('If document new end token'),
+    'description' => t("If document  new end token. Set at end of if-token block.")
+  ];
+  $info['tokens']['loop_notification']['if_document_changes'] = [
+    'name' => t('If document changes start token'),
+    'description' => t("If document  changes start token. Set at start of if-token block.")
+  ];
+  $info['tokens']['loop_notification']['endif_document_changes'] = [
+    'name' => t('If document changes end token'),
+    'description' => t("If document  changes end token. Set at end of if-token block.")
   ];
 
   return $info;

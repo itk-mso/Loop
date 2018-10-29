@@ -23,17 +23,6 @@ function loop_notification_menu() {
     'access arguments' => ['access administration pages'],
   ];
 
-  /*
-  $items['user/%user/notification_settings'] = array(
-    'title' => 'Example Form',
-    'description' => 'A form to mess around with.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array(arg(1), 'loop_notification_user_form'),
-    'type' => MENU_NORMAL_ITEM,
-    'access callback' => TRUE
-  );
-  */
-
   return $items;
 }
 
@@ -204,21 +193,6 @@ function loop_notification_config_form($form) {
     ],
   ];
 
-  $form['loop_notification_email_wrapper']['custom_tokens'] = [
-    '#markup' =>
-      '<li>' . t('@token - New questions', ['@token' => '[loop:question_new]']) . '</li>' .
-      '<li>' . t('@token - Changed questions', ['@token' => '[loop:question_changes]']) . '</li>' .
-      '<li>' . t('@token - New answers', ['@token' => '[loop:answer_new]']) . '</li>' .
-      '<li>' . t('@token - Changed answers', ['@token' => '[loop:answer_changes]']) . '</li>' .
-      '<li>' . t('@token - New document collections', ['@token' => '[loop:document_collection_new]']) . '</li>' .
-      '<li>' . t('@token - Changed document collections', ['@token' => '[loop:document_collection_changes]']) . '</li>' .
-      '<li>' . t('@token - New documents', ['@token' => '[loop:document_new]']) . '</li>' .
-      '<li>' . t('@token - Changed documents', ['@token' => '[loop:document_changes]']) . '</li>'
-    ,
-    '#prefix' => '<p><h4>' . t('Custom tokens') . '</h4><ul>',
-    '#suffix' => '</ul></p>',
-  ];
-
   $form['loop_notification_email_wrapper']['tokens'] = _loop_notification_get_email_tokens();
 
   return system_settings_form($form);
@@ -315,6 +289,10 @@ function loop_notification_cron() {
  */
 function _loop_notification_get_email_tokens() {
   $render = RulesTokenEvaluator::help([
+    'loop_notification' => [
+      'label' => 'Loop notification',
+      'type' => 'loop_notification'
+    ],
     'site' => [
       'type' => 'site',
       'label' => 'Site information',
@@ -669,29 +647,25 @@ function _loop_notification_send_notifications() {
     }
 
     $custom_tokens = [
-      '[loop:answer_new]' => '<ul>' . implode('', $created_comments_to_send) . '</ul>',
-      '[loop:answer_changes]' => '<ul>' . implode('', $changed_comments_to_send) . '</ul>',
-      '[loop:question_new]' => '<ul>' . implode('', $created_nodes_to_send['post']) . '</ul>',
-      '[loop:question_changes]' => '<ul>' . implode('', $changed_nodes_to_send['post']) . '</ul>',
-      '[loop:document_collection_new]' => '<ul>' . implode('', $created_nodes_to_send['loop_documents_collection']) . '</ul>',
-      '[loop:document_collection_changes]' => '<ul>' . implode('', $changed_nodes_to_send['loop_documents_collection']) . '</ul>',
-      '[loop:document_new]' => '<ul>' . implode('', $created_nodes_to_send['loop_documents_document']) . '</ul>',
-      '[loop:document_changes]' => '<ul>' . implode('', $changed_nodes_to_send['loop_documents_document']) . '</ul>',
+      'answer_new' => '<ul>' . implode('', $created_comments_to_send) . '</ul>',
+      'answer_changes' => '<ul>' . implode('', $changed_comments_to_send) . '</ul>',
+      'question_new' => '<ul>' . implode('', $created_nodes_to_send['post']) . '</ul>',
+      'question_changes' => '<ul>' . implode('', $changed_nodes_to_send['post']) . '</ul>',
+      'document_collection_new' => '<ul>' . implode('', $created_nodes_to_send['loop_documents_collection']) . '</ul>',
+      'document_collection_changes' => '<ul>' . implode('', $changed_nodes_to_send['loop_documents_collection']) . '</ul>',
+      'document_new' => '<ul>' . implode('', $created_nodes_to_send['loop_documents_document']) . '</ul>',
+      'document_changes' => '<ul>' . implode('', $changed_nodes_to_send['loop_documents_document']) . '</ul>',
     ];
 
     // Replace end of lines.
     $mail_template = str_replace(["\r\n", "\r", "\n"], '<br/>', $mail_template);
 
-    // Replace loop tokens.
-    $body = _loop_notification_replace_loop_tokens($mail_template, $custom_tokens);
-    $subject = _loop_notification_replace_loop_tokens($mail_subject, $custom_tokens);
-
     // Load the user.
     $user = user_load($user_key);
 
-    // Regular token replacement.
-    $body = token_replace($body, ['user' => $user]);
-    $subject = token_replace($subject, ['user' => $user]);
+    // Trigger token replacements with loop_notification data.
+    $body = token_replace($mail_template, ['user' => $user, 'loop_notification' => $custom_tokens]);
+    $subject = token_replace($mail_subject, ['user' => $user, 'loop_notification' => $custom_tokens]);
 
     _loop_notification_mail_send($subject, $body, $user);
 
@@ -757,4 +731,69 @@ function loop_notification_mail($key, &$message, $params) {
 
   $message['subject'] = $params['subject'];
   $message['body'][] = $params['body'];
+}
+
+/**
+ * Implements hook_token_info().
+ */
+function loop_notification_token_info() {
+  $info['types']['loop_notification'] = [
+    'name' => t('Loop Notification'),
+  ];
+  $info['tokens']['loop_notification']['answer_new'] = [
+    'name' => t('New answers'),
+    'description' => t("New answers to questions."),
+  ];
+  $info['tokens']['loop_notification']['answer_changes'] = [
+    'name' => t('Changed answers'),
+    'description' => t("Changed answers to questions."),
+  ];
+  $info['tokens']['loop_notification']['question_new'] = [
+    'name' => t('New questions'),
+    'description' => t("New questions added."),
+  ];
+  $info['tokens']['loop_notification']['question_changes'] = [
+    'name' => t('Changed questions'),
+    'description' => t("Changed questions."),
+  ];
+  $info['tokens']['loop_notification']['document_collection_new'] = [
+    'name' => t('New document collections'),
+    'description' => t("New document collections added."),
+  ];
+  $info['tokens']['loop_notification']['document_collection_changes'] = [
+    'name' => t('Changed document collections'),
+    'description' => t("Changed document collections."),
+  ];
+  $info['tokens']['loop_notification']['document_new'] = [
+    'name' => t('New documents'),
+    'description' => t("New documents added."),
+  ];
+  $info['tokens']['loop_notification']['document_changes'] = [
+    'name' => t('Changed documents'),
+    'description' => t("Changed documents."),
+  ];
+
+  return $info;
+}
+/**
+ * Implements hook_tokens().
+ */
+function loop_notification_tokens(
+  $type,
+  $tokens,
+  array $data = [],
+  array $options = []
+) {
+  $replacements = [];
+
+  if ($type == 'loop-notification' && !empty($data['loop_notification'])) {
+    $token_data = $data['loop_notification'];
+    foreach ($tokens as $name => $original) {
+      if (isset($token_data[$name])) {
+        $replacements[$original] = $token_data[$name];
+      }
+    }
+  }
+
+  return $replacements;
 }

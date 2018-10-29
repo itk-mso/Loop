@@ -110,51 +110,34 @@ function loop_notification_update_7004() {
     'loop_notification_send_mail_subject' => 'Nyt fra [site:name]',
     'loop_notification_send_mail_body' => '<h2>Nyt fra [site:name]</h2>
 
-<p>
 Spørgsmål med nye svar:
-[loop:answer_new]
-</p>
+[loop-notification:answer_new]
 
-<p>
-Redigerede svar:
-[loop:answer_changes]
-</p>
+Spørgsmål med redigerede svar:
+[loop-notification:answer_changes]
 
-<p>
 Nye spørgsmål:
-[loop:question_new]
-</p>
+[loop-notification:question_new]
 
-<p>
 Redigerede spørgsmål:
-[loop:question_changes]
-</p>
+[loop-notification:question_changes]
 
-<p>
 Nye dokumentsamlinger:
-[loop:document_collection_new]
-</p>
+[loop-notification:document_collection_new]
 
-<p>
 Ændrede dokumentsamlinger:
-[loop:document_collection_changes]
-</p>
+[loop-notification:document_collection_changes]
 
-<p>
 Nye dokumenter
-[loop:document_new]
-</p>
+[loop-notification:document_new]
 
-<p>
 Ændrede dokumenter:
-[loop:document_changes]
-</p>
+[loop-notification:document_changes]
 
-<p>Med venlig hilsen<br/>
-[site:name]</p>
-<br />
-<br />
-Dette er en automatisk meddelelse fra Loop, og kan ikke besvares.<br />
+Med venlig hilsen
+[site:name]
+
+Dette er en automatisk meddelelse fra Loop, og kan ikke besvares.
 Du kan styre dine abonnementer fra din brugerprofil',
     );
 

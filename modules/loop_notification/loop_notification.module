@@ -528,6 +528,8 @@ function _loop_notification_create_list_element(StdClass $node) {
  *   Array of timestamps with uid as key.
  * @param array $content_types
  *   Array of content_types to receive notifications for.
+ * @param array $user_notification_settings
+ *   Array of user notification settings.
  */
 function _loop_notification_handle_nodes($nid, array &$users_to_notify, array &$node_array, array &$list_array, $timestamp, array $loop_notification_last_user_notifications, array $content_types, array $user_notification_settings) {
   $node = node_load($nid);

@@ -165,6 +165,40 @@ function loop_notification_default_rules_configuration() {
       ]
     }
   }');
+  $items['rules_autosubscribe_node_loop_documents_document_author'] = entity_import('rules_config', '{ "rules_autosubscribe_node_loop_documents_document_author" : {
+      "LABEL" : "Autosubscribe node loop_documents_document author",
+      "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
+      "REQUIRES" : [ "flag", "rules" ],
+      "ON" : { "node_insert--loop_documents_document" : { "bundle" : "loop_documents_document" } },
+      "DO" : [
+        { "flag_flagnode" : {
+            "flag" : "subscribe_node",
+            "node" : [ "node" ],
+            "flagging_user" : [ "node:author" ],
+            "permission_check" : 0
+          }
+        }
+      ]
+    }
+  }');
+  $items['rules_autosubscribe_node_loop_documents_collection_author'] = entity_import('rules_config', '{ "rules_autosubscribe_node_loop_documents_collection_author" : {
+      "LABEL" : "Autosubscribe node loop_documents_collection author",
+      "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
+      "REQUIRES" : [ "flag", "rules" ],
+      "ON" : { "node_insert--loop_documents_collection" : { "bundle" : "loop_documents_collection" } },
+      "DO" : [
+        { "flag_flagnode" : {
+            "flag" : "subscribe_node",
+            "node" : [ "node" ],
+            "flagging_user" : [ "node:author" ],
+            "permission_check" : 0
+          }
+        }
+      ]
+    }
+  }');
   $items['rules_create_notification'] = entity_import('rules_config', '{ "rules_create_notification" : {
       "LABEL" : "Create notification on comment create",
       "PLUGIN" : "rule set",

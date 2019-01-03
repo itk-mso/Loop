@@ -64,19 +64,16 @@ function loop_notification_user_form($form, &$form_state) {
 
 /**
  * Validation for user's notification settings form.
- *
- * @param $form
- *   The form.
- *
- * @param $form_state
- *   The form state.
  */
 function loop_notification_user_form_validate($form, &$form_state) {
-  if (!($form_state['values']['loop_notification_notification_interval'] > 0)){
+  if (!($form_state['values']['loop_notification_notification_interval'] > 0)) {
     form_set_error('loop_notification_notification_interval', t('Notification interval must be higher than 0.'));
   }
 }
 
+/**
+ * Handles user_form submit.
+ */
 function loop_notification_user_form_submit($form, &$form_state) {
   $current_user_id = $GLOBALS['user']->uid;
 
@@ -91,8 +88,6 @@ function loop_notification_user_form_submit($form, &$form_state) {
 
 /**
  * Implements hook_block_info().
- *
- * @return mixed
  */
 function loop_notification_block_info() {
   $blocks['loop_notification_settings_block'] = array(
@@ -256,8 +251,6 @@ function loop_notification_comment_update($comment) {
 
 /**
  * Implements hook_cron().
- *
- *
  */
 function loop_notification_cron() {
   $last_cron = (int) variable_get('loop_notification_last_cron');
@@ -266,7 +259,8 @@ function loop_notification_cron() {
   $now = time();
 
   if (is_null($cron_interval)) {
-    $cron_interval = 60 * 60 * 24; // Defaults to once pr. day.
+    // Defaults to once pr. day.
+    $cron_interval = 60 * 60 * 24;
   }
 
   // Default last cron to now, to avoid sending old notifications.
@@ -291,7 +285,7 @@ function _loop_notification_get_email_tokens() {
   $render = RulesTokenEvaluator::help([
     'loop_notification' => [
       'label' => 'Loop notification',
-      'type' => 'loop_notification'
+      'type' => 'loop_notification',
     ],
     'site' => [
       'type' => 'site',
@@ -430,7 +424,7 @@ function _loop_notification_check_content_type($node) {
 /**
  * Get nodes that have been changes since $modification_limit.
  *
- * @param $modification_limit
+ * @param int $modification_limit
  *   The unix timestamp from which to get modifications from.
  *
  * @return array
@@ -444,7 +438,8 @@ function _loop_notification_modified_nodes($modification_limit) {
   try {
     $query->entityCondition('entity_type', 'node')
       ->propertyCondition('changed', $modification_limit, '>');
-  } catch (EntityFieldQueryException $e) {
+  }
+  catch (EntityFieldQueryException $e) {
     // Ignore error. Return empty array.
     // @TODO: Write error to log.
     return $nodes;
@@ -463,10 +458,11 @@ function _loop_notification_modified_nodes($modification_limit) {
 /**
  * Get all comments that where created after $loop_notification_last_cron.
  *
- * @param $loop_notification_last_cron
+ * @param int $loop_notification_last_cron
  *   The timestamp to delimit search.
  *
  * @return array
+ *   Array of comments.
  */
 function _loop_notification_new_comments($loop_notification_last_cron) {
   $result = db_query('SELECT nid FROM {comment} WHERE created > :timestamp AND status = :status', array(
@@ -479,12 +475,16 @@ function _loop_notification_new_comments($loop_notification_last_cron) {
 }
 
 /**
- * Get all comments that where modified (but not created) after $loop_notification_last_cron.
+ * Get modified comments.
  *
- * @param $loop_notification_last_cron
+ * Get all comments that where modified (but not created) after
+ * $loop_notification_last_cron.
+ *
+ * @param int $loop_notification_last_cron
  *   The timestamp to delimit search.
  *
  * @return array
+ *   Array of comments.
  */
 function _loop_notification_modified_comments($loop_notification_last_cron) {
   $result = db_query('SELECT nid FROM {comment} WHERE changed > :timestamp AND created < :timestamp AND status = :status', array(
@@ -499,12 +499,13 @@ function _loop_notification_modified_comments($loop_notification_last_cron) {
 /**
  * Create a list element of the link to a node.
  *
- * @param $node
+ * @param StdClass $node
  *   The node to link to.
  *
  * @return string
+ *   String of list element html.
  */
-function _loop_notification_create_list_element($node) {
+function _loop_notification_create_list_element(StdClass $node) {
   $link = l($node->title, $alias = drupal_get_path_alias('node/' . $node->nid));
 
   return '<li>' . $link . '</li>';
@@ -513,22 +514,22 @@ function _loop_notification_create_list_element($node) {
 /**
  * Updated the relevant arrays for handling a changes.
  *
- * @param $nid
+ * @param int $nid
  *   The node id to add.
- * @param $users_to_notify
+ * @param array $users_to_notify
  *   The users to notify.
- * @param $node_array
+ * @param array $node_array
  *   Array of nodes linked to created/changed.
- * @param $list_array
+ * @param array $list_array
  *   The array of list elements.
- * @param $timestamp
+ * @param int $timestamp
  *   The time to compare interval overlaps with.
- * @param $loop_notification_last_user_notifications
+ * @param array $loop_notification_last_user_notifications
  *   Array of timestamps with uid as key.
- * @param $content_types
+ * @param array $content_types
  *   Array of content_types to receive notifications for.
  */
-function _loop_notification_handle_nodes($nid, &$users_to_notify, &$node_array, &$list_array, $timestamp, $loop_notification_last_user_notifications, $content_types, $user_notification_settings) {
+function _loop_notification_handle_nodes($nid, array &$users_to_notify, array &$node_array, array &$list_array, $timestamp, array $loop_notification_last_user_notifications, array $content_types, array $user_notification_settings) {
   $node = node_load($nid);
 
   // Make sure notifications are activated for the given node type.
@@ -559,6 +560,8 @@ function _loop_notification_handle_nodes($nid, &$users_to_notify, &$node_array, 
 }
 
 /**
+ * Send notifications.
+ *
  * Sends notifications to all users of changes to the content they subscribe to
  * that has changed or been created, since the last notification mail was sent.
  */
@@ -633,7 +636,7 @@ function _loop_notification_send_notifications() {
       if (isset($nodes_changed[$node->type][$nid])) {
         $changed_nodes_to_send[$node->type][] = $nodes_changed[$node->type][$nid];
       }
-      else if (isset($nodes_created[$node->type][$nid])) {
+      elseif (isset($nodes_created[$node->type][$nid])) {
         $created_nodes_to_send[$node->type][] = $nodes_created[$node->type][$nid];
       }
 
@@ -656,9 +659,6 @@ function _loop_notification_send_notifications() {
       'document_new' => '<ul>' . implode('', $created_nodes_to_send['loop_documents_document']) . '</ul>',
       'document_changes' => '<ul>' . implode('', $changed_nodes_to_send['loop_documents_document']) . '</ul>',
     ];
-
-    // Replace end of lines.
-//    $mail_template = str_replace(["\r\n", "\r", "\n"], '<br/>', $mail_template);
 
     // Load the user.
     $user = user_load($user_key);
@@ -695,10 +695,11 @@ function _loop_notification_send_notifications() {
 /**
  * Replace if tokens.
  *
- * @param $text
+ * @param string $text
  *   The text to replace in.
  *
- * @return null|string|string[]
+ * @return mixed|string
+ *   The resulting string.
  */
 function _loop_notification_replace_loop_tokens($text, $if_tokens) {
   foreach ($if_tokens as $key => $show_if) {
@@ -725,13 +726,13 @@ function _loop_notification_replace_loop_tokens($text, $if_tokens) {
 /**
  * Send a notification mail.
  *
- * @param $subject
+ * @param string $subject
  *   The subject.
- * @param $message
+ * @param string $message
  *   The message.
- * @param $to
+ * @param string $to
  *   The receiver.
- * @param null $from
+ * @param string $from
  *   The sender.
  */
 function _loop_notification_mail_send($subject, $message, $to, $from = NULL) {
@@ -801,74 +802,75 @@ function loop_notification_token_info() {
 
   $info['tokens']['loop_notification']['if_answer_new'] = [
     'name' => t('If answer new start token'),
-    'description' => t("If answer new start token. Set at start of if-token block.")
+    'description' => t("If answer new start token. Set at start of if-token block."),
   ];
   $info['tokens']['loop_notification']['endif_answer_new'] = [
     'name' => t('If answer new end token'),
-    'description' => t("If answer new end token. Set at end of if-token block.")
+    'description' => t("If answer new end token. Set at end of if-token block."),
   ];
   $info['tokens']['loop_notification']['if_answer_changes'] = [
     'name' => t('If answer changes start token'),
-    'description' => t("If answer new start token. Set at start of if-token block.")
+    'description' => t("If answer new start token. Set at start of if-token block."),
   ];
   $info['tokens']['loop_notification']['endif_answer_changes'] = [
     'name' => t('If answer changes end token'),
-    'description' => t("If answer new end token. Set at end of if-token block.")
+    'description' => t("If answer new end token. Set at end of if-token block."),
   ];
 
   $info['tokens']['loop_notification']['if_question_new'] = [
     'name' => t('If question new start token'),
-    'description' => t("If question new start token. Set at start of if-token block.")
+    'description' => t("If question new start token. Set at start of if-token block."),
   ];
   $info['tokens']['loop_notification']['endif_question_new'] = [
     'name' => t('If question new end token'),
-    'description' => t("If question new end token. Set at end of if-token block.")
+    'description' => t("If question new end token. Set at end of if-token block."),
   ];
   $info['tokens']['loop_notification']['if_question_changes'] = [
     'name' => t('If question changes start token'),
-    'description' => t("If question new start token. Set at start of if-token block.")
+    'description' => t("If question new start token. Set at start of if-token block."),
   ];
   $info['tokens']['loop_notification']['endif_question_changes'] = [
     'name' => t('If question changes end token'),
-    'description' => t("If question new end token. Set at end of if-token block.")
+    'description' => t("If question new end token. Set at end of if-token block."),
   ];
 
   $info['tokens']['loop_notification']['if_document_collection_new'] = [
     'name' => t('If document collection new start token'),
-    'description' => t("If document collection new start token. Set at start of if-token block.")
+    'description' => t("If document collection new start token. Set at start of if-token block."),
   ];
   $info['tokens']['loop_notification']['endif_document_collection_new'] = [
     'name' => t('If document collection new end token'),
-    'description' => t("If document collection new end token. Set at end of if-token block.")
+    'description' => t("If document collection new end token. Set at end of if-token block."),
   ];
   $info['tokens']['loop_notification']['if_document_collection_changes'] = [
     'name' => t('If document collection changes start token'),
-    'description' => t("If document collection changes start token. Set at start of if-token block.")
+    'description' => t("If document collection changes start token. Set at start of if-token block."),
   ];
   $info['tokens']['loop_notification']['endif_document_collection_changes'] = [
     'name' => t('If document collection changes end token'),
-    'description' => t("If document collection changes end token. Set at end of if-token block.")
+    'description' => t("If document collection changes end token. Set at end of if-token block."),
   ];
 
   $info['tokens']['loop_notification']['if_document_new'] = [
     'name' => t('If document new start token'),
-    'description' => t("If document  new start token. Set at start of if-token block.")
+    'description' => t("If document  new start token. Set at start of if-token block."),
   ];
   $info['tokens']['loop_notification']['endif_document_new'] = [
     'name' => t('If document new end token'),
-    'description' => t("If document  new end token. Set at end of if-token block.")
+    'description' => t("If document  new end token. Set at end of if-token block."),
   ];
   $info['tokens']['loop_notification']['if_document_changes'] = [
     'name' => t('If document changes start token'),
-    'description' => t("If document  changes start token. Set at start of if-token block.")
+    'description' => t("If document  changes start token. Set at start of if-token block."),
   ];
   $info['tokens']['loop_notification']['endif_document_changes'] = [
     'name' => t('If document changes end token'),
-    'description' => t("If document  changes end token. Set at end of if-token block.")
+    'description' => t("If document  changes end token. Set at end of if-token block."),
   ];
 
   return $info;
 }
+
 /**
  * Implements hook_tokens().
  */

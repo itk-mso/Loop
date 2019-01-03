@@ -174,8 +174,19 @@ function loop_notification_schema() {
     'description' => 'User settings for notifications.',
     'fields' => array(
       'uid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
-      'enabled' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => '0', 'size' => 'tiny'),
-      'update_interval' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => '604800'),
+      'enabled' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => '0',
+        'size' => 'tiny',
+      ),
+      'update_interval' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => '604800',
+      ),
     ),
   );
   return $schema;
@@ -189,8 +200,19 @@ function loop_notification_update_7005() {
     'description' => 'User settings for notifications.',
     'fields' => array(
       'uid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
-      'enabled' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => '0', 'size' => 'tiny'),
-      'update_interval' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => '604800'),
+      'enabled' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => '0',
+        'size' => 'tiny',
+      ),
+      'update_interval' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => '604800',
+      ),
     ),
   );
   db_create_table('loop_notification_user_settings', $table);

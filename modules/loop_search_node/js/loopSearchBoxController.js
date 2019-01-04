@@ -159,8 +159,8 @@ angular.module('searchBoxApp').controller('loopSearchBoxController', ['CONFIG', 
 
       // Check if any search query have been located from the hash tag.
       if (state.hasOwnProperty('query')) {
-        // Query found in state, so execute that search.
-        $scope.query = state.query;
+        // Query found in state, so merge that with the default query.
+        angular.extend($scope.query, state.query);
 
         // Correct active classes in UI based on query for filters.
         if ($scope.query.hasOwnProperty('filters') && $scope.query.filters.hasOwnProperty('taxonomy') && $scope.query.filters.taxonomy.hasOwnProperty('type')) {

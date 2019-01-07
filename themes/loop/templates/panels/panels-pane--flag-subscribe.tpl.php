@@ -28,17 +28,8 @@
 
 <aside class="block-follow-question">
   <div class="block-module--inner">
-    <?php if ($pane->subtype == "taxonomy_term") {
-      ?>
-      <h2 class="block-module--header"><?php print t('Follow subject'); ?></h2>
-      <div class="block-module--content"><?php print t('Have an email sent when there are new questions.'); ?></div>
-      <?php
-    } else {
-      ?>
-      <h2 class="block-module--header"><?php print t('Follow question'); ?></h2>
-      <div class="block-module--content"><?php print t('Have an email sent when there are new comments.'); ?></div>
-      <?php
-    } ?>
+    <h2 class="block-module--header"><?php print t('Follow'); ?></h2>
+    <div class="block-module--content"><?php print t('Receive notifications when there are changes.'); ?></div>
 
       <?php print render($title_prefix); ?>
       <?php if ($title): ?>

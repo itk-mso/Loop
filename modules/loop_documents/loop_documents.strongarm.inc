@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * loop_documents.strongarm.inc

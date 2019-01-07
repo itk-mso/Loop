@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * loop_documents.pages_default.inc
@@ -119,6 +118,31 @@ function loop_documents_default_page_manager_handlers() {
   $pane->uuid = 'cf7f5491-5b00-4348-9070-bdef0eeb1ee1';
   $display->content['new-cf7f5491-5b00-4348-9070-bdef0eeb1ee1'] = $pane;
   $display->panels['beta'][0] = 'new-cf7f5491-5b00-4348-9070-bdef0eeb1ee1';
+  $pane = new stdClass();
+  $pane->pid = 'new-f578bf4b-6640-439c-bb40-db8ad2d8b57c';
+  $pane->panel = 'beta';
+  $pane->type = 'flag_link';
+  $pane->subtype = 'node';
+  $pane->shown = TRUE;
+  $pane->access = array();
+  $pane->configuration = array(
+    'flag_name' => 'subscribe_node',
+    'context' => 'argument_entity_id:node_1',
+    'override_title' => 1,
+    'override_title_text' => '',
+    'override_title_heading' => 'h2',
+  );
+  $pane->cache = array();
+  $pane->style = array(
+    'settings' => NULL,
+  );
+  $pane->css = array();
+  $pane->extras = array();
+  $pane->position = 1;
+  $pane->locks = array();
+  $pane->uuid = 'f578bf4b-6640-439c-bb40-db8ad2d8b57c';
+  $display->content['new-f578bf4b-6640-439c-bb40-db8ad2d8b57c'] = $pane;
+  $display->panels['beta'][1] = 'new-f578bf4b-6640-439c-bb40-db8ad2d8b57c';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = '0';
   $handler->conf['display'] = $display;

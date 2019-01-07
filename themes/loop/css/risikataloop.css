@@ -4762,6 +4762,17 @@ a.question--term.taxonomy-keyword {
 .loop-documents .toc-filter-back-to-top {
   display: none; }
 
+.loop-documents table.loop-documents-table {
+  width: 100%; }
+  .loop-documents table.loop-documents-table th {
+    background: #ccc;
+    text-align: center; }
+  .loop-documents table.loop-documents-table th, .loop-documents table.loop-documents-table td {
+    vertical-align: top; }
+  .loop-documents table.loop-documents-table-steps td:first-child {
+    width: 10%;
+    text-align: center; }
+
 /**
  * Quickbox module
  */

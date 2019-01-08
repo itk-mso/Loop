@@ -531,7 +531,7 @@ function _loop_notification_create_list_element(StdClass $node) {
  * @param array $user_notification_settings
  *   Array of user notification settings.
  */
-function _loop_notification_handle_nodes($nid, array &$users_to_notify, array &$node_array, array &$list_array, $timestamp, array $loop_notification_last_user_notifications, array $content_types, array $user_notification_settings) {
+function _loop_notification_handle_nodes($nid, array &$users_to_notify, array &$node_array, array &$list_array, $timestamp, $loop_notification_last_user_notifications, $content_types, $user_notification_settings) {
   $node = node_load($nid);
 
   // Make sure notifications are activated for the given node type.
@@ -546,7 +546,9 @@ function _loop_notification_handle_nodes($nid, array &$users_to_notify, array &$
   $list_array[$nid] = _loop_notification_create_list_element($node);
 
   foreach ($users as $user) {
-    if (!$user_notification_settings[$user->uid]->enabled) {
+    // Default to sending the mail, unless the explicit set to false.
+    if (isset($user_notification_settings[$user->uid]) &&
+        $user_notification_settings[$user->uid]->enabled == 0) {
       continue;
     }
 
@@ -617,9 +619,15 @@ function _loop_notification_send_notifications() {
   foreach ($modified_nodes as $node) {
     // Sort by created_nodes_to_send/changed_nodes_to_send.
     if ($node->created > $loop_notification_last_cron) {
+      if (!isset($nodes_created[$node->type])) {
+        $nodes_created[$node->type] = [];
+      }
       _loop_notification_handle_nodes($node->nid, $user_nodes, $node_array, $nodes_created[$node->type], $now, $loop_notification_last_user_notifications, $content_types, $user_notification_settings);
     }
     else {
+      if (!isset($nodes_changed[$node->type])) {
+        $nodes_changed[$node->type] = [];
+      }
       _loop_notification_handle_nodes($node->nid, $user_nodes, $node_array, $nodes_changed[$node->type], $now, $loop_notification_last_user_notifications, $content_types, $user_notification_settings);
     }
   }

@@ -23,6 +23,7 @@ dependencies[] = secure_permissions
 dependencies[] = strongarm
 dependencies[] = taxonomy
 dependencies[] = text
+dependencies[] = toc_filter
 dependencies[] = token
 dependencies[] = view_unpublished
 dependencies[] = wysiwyg

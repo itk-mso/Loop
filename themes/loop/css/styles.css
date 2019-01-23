@@ -4769,9 +4769,14 @@ a.question--term.taxonomy-keyword {
     text-align: center; }
   .loop-documents table.loop-documents-table th, .loop-documents table.loop-documents-table td {
     vertical-align: top; }
+  .loop-documents table.loop-documents-table p {
+    margin-top: 0; }
   .loop-documents table.loop-documents-table-steps td:first-child {
     width: 10%;
     text-align: center; }
+  .loop-documents table.loop-documents-table img {
+    height: auto !important;
+    max-width: inherit !important; }
 
 /**
  * Quickbox module

@@ -1,5 +1,11 @@
 # Loop Changelog
 
+## Loop 1.8.17
+* LOOP-632: Changed display of image in tables
+
+## Loop 1.8.12-1.8.16
+* Stuff happened here that was never documented properly
+
 ## Loop 1.8.11
 * LOOP-615: Changed encoding of search links
 

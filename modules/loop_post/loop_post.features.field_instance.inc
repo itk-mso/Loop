@@ -35,7 +35,7 @@ function loop_post_field_default_field_instances() {
           'editor' => 'editor',
           'html' => 0,
           'plain_text' => 0,
-          'simple' => 0,
+          'simple' => 'simple',
         ),
         'allowed_formats_toggle' => 1,
         'default_order_toggle' => 0,
@@ -151,7 +151,7 @@ function loop_post_field_default_field_instances() {
     'settings' => array(
       'better_formats' => array(
         'allowed_formats' => array(
-          'editor' => 0,
+          'editor' => 'editor',
           'html' => 0,
           'loop_documents' => 0,
           'mime_mail_filter' => 0,

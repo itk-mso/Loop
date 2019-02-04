@@ -89,3 +89,13 @@ function loop_post_form_validate(&$form, &$form_state) {
     $_SESSION[$session_key][$form_build_id] = TRUE;
   }
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function loop_post_form_comment_form_alter(&$form) {
+  if ($form['#node']->type == 'post') {
+    $form['comment_body'][LANGUAGE_NONE][0]['#wysiwyg'] = FALSE;
+    $form['comment_body'][LANGUAGE_NONE][0]['#format'] = 'simple';
+  }
+}

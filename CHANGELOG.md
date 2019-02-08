@@ -1,5 +1,8 @@
 # Loop Changelog
 
+## In hotfix/support-1924-allowed-formats
+* SUPPORT-1924: Readded editor format to fix bug where questions could not be changed.
+
 ## Loop 1.8.17
 * LOOP-632: Changed display of image in tables
 

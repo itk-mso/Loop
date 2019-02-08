@@ -1,6 +1,6 @@
 # Loop Changelog
 
-## In hotfix/support-1924-allowed-formats
+## Loop 1.8.18
 * SUPPORT-1924: Readded editor format to fix bug where questions could not be changed.
 
 ## Loop 1.8.17

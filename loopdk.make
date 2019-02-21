@@ -99,7 +99,7 @@ projects[libraries][subdir] = "contrib"
 projects[libraries][version] = "2.3"
 
 projects[link][subdir] = "contrib"
-projects[link][version] = "1.4"
+projects[link][version] = "1.6"
 
 projects[logintoboggan][subdir] = "contrib"
 projects[logintoboggan][version] = "1.5"

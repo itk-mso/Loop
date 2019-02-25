@@ -18,7 +18,7 @@ libraries[test][directory_name] = "mytest"
 libraries[test][destination] = "mytest"
 
 ; Install profile.
-projects[loopdk][type] = "profile"
-projects[loopdk][download][type] = "git"
-projects[loopdk][download][url] = "https://github.com/itk-mso/Loop.git"
-projects[loopdk][download][tag] = "1.8.12"
+;projects[loopdk][type] = "profile"
+;projects[loopdk][download][type] = "git"
+;projects[loopdk][download][url] = "https://github.com/itk-mso/Loop.git"
+;projects[loopdk][download][tag] = "1.8.12"

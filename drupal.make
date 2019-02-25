@@ -12,6 +12,11 @@ projects[drupal][patch][] = "https://drupal.org/files/issues/translate_role_name
 projects[drupal][patch][] = "https://www.drupal.org/files/issues/optimize_scan-2329453-89-d7-do-not-test.patch"
 projects[drupal][patch][] = "https://raw.githubusercontent.com/os2loop/profile/master/patches/rebuild_local_js_alter.patch"
 
+libraries[test][download][type] = "get"
+libraries[test][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"
+libraries[test][directory_name] = "mytest"
+libraries[test][destination] = "mytest"
+
 ; Install profile.
 projects[loopdk][type] = "profile"
 projects[loopdk][download][type] = "git"

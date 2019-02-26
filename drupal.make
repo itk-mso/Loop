@@ -14,9 +14,8 @@ projects[drupal][patch][] = "https://raw.githubusercontent.com/os2loop/profile/m
 
 libraries[test][download][type] = "get"
 libraries[test][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"
-libraries[test][destination] = libraries/../../../
+libraries[test][destination] = /../
 libraries[test][directory_name] = .test
-
 
 libraries[othertest][download][type] = "get"
 libraries[othertest][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"

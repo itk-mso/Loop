@@ -12,20 +12,14 @@ projects[drupal][patch][] = "https://drupal.org/files/issues/translate_role_name
 projects[drupal][patch][] = "https://www.drupal.org/files/issues/optimize_scan-2329453-89-d7-do-not-test.patch"
 projects[drupal][patch][] = "https://raw.githubusercontent.com/os2loop/profile/master/patches/rebuild_local_js_alter.patch"
 
-libraries[test][download][type] = "get"
-libraries[test][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"
-libraries[test][destination] = /../
-libraries[test][directory_name] = .test
-
-libraries[othertest][download][type] = "get"
-libraries[othertest][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"
-libraries[othertest][destination] = ../../
-libraries[othertest][directory_name] = .other
+libraries[docker_vhost][download][type] = "get"
+libraries[docker_vhost][download][url] = "https://raw.githubusercontent.com/aakb/itkdev-docker/develop/templates/drupal-7/.docker/vhost.conf"
+libraries[docker_vhost][destination] = /../../
+libraries[docker_vhost][directory_name] = .docker
 
 libraries[otherothertest][download][type] = "get"
 libraries[otherothertest][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"
-libraries[otherothertest][destination] = /
-libraries[otherothertest][directory_name] = .otherother
+libraries[docker_vhost][destination] = /../../
 
 ; Install profile.
 ;projects[loopdk][type] = "profile"

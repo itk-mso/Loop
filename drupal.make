@@ -9,11 +9,10 @@ projects[drupal][version] = 7.64
 projects[drupal][patch][] = "https://drupal.org/files/drupal-menu_navigation_links-1018614-83.patch"
 projects[drupal][patch][] = "https://drupal.org/files/issues/translate_role_names-2205581-1.patch"
 ; Drupal has issues clearing caches when node_modules/ or bower_components/ directories are present.
-projects[drupal][patch][] = "https://www.drupal.org/files/issues/optimize_scan-2329453-89-d7-do-not-test.patch"
 projects[drupal][patch][] = "https://raw.githubusercontent.com/os2loop/profile/master/patches/rebuild_local_js_alter.patch"
 
 ; Install profile.
 projects[loopdk][type] = "profile"
 projects[loopdk][download][type] = "git"
 projects[loopdk][download][url] = "https://github.com/itk-mso/Loop.git"
-projects[loopdk][download][tag] = "1.8.19"
+projects[loopdk][download][tag] = "1.8.20"

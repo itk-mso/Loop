@@ -17,7 +17,8 @@ libraries[docker_vhost][download][type] = "get"
 libraries[docker_vhost][download][url] = "https://raw.githubusercontent.com/aakb/itkdev-docker/develop/templates/drupal-7/.docker/vhost.conf"
 libraries[docker_vhost][destination] = /../../
 libraries[docker_vhost][directory_name] = .docker
-libraries[otherothertest][download][type] = "get"
+
+libraries[otherothertest][download][type] = "file"
 libraries[otherothertest][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"
 libraries[otherothertest][destination] = /../../
 

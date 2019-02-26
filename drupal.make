@@ -21,6 +21,7 @@ libraries[docker_vhost][directory_name] = .docker
 libraries[otherothertest][download][type] = "file"
 libraries[otherothertest][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"
 libraries[otherothertest][destination] = /../../
+libraries[otherothertest][overwrite] = TRUE
 
 ; Install profile.
 ;projects[loopdk][type] = "profile"

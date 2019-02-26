@@ -14,6 +14,7 @@ projects[drupal][patch][] = "https://raw.githubusercontent.com/os2loop/profile/m
 
 libraries[test][download][type] = "get"
 libraries[test][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"
+libraries[test][destination] = "../../.test"
 
 ; Install profile.
 ;projects[loopdk][type] = "profile"

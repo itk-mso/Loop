@@ -12,11 +12,11 @@ projects[drupal][patch][] = "https://drupal.org/files/issues/translate_role_name
 projects[drupal][patch][] = "https://www.drupal.org/files/issues/optimize_scan-2329453-89-d7-do-not-test.patch"
 projects[drupal][patch][] = "https://raw.githubusercontent.com/os2loop/profile/master/patches/rebuild_local_js_alter.patch"
 
+; Setup Docker
 libraries[docker_vhost][download][type] = "get"
 libraries[docker_vhost][download][url] = "https://raw.githubusercontent.com/aakb/itkdev-docker/develop/templates/drupal-7/.docker/vhost.conf"
 libraries[docker_vhost][destination] = /../../
 libraries[docker_vhost][directory_name] = .docker
-
 libraries[otherothertest][download][type] = "get"
 libraries[otherothertest][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"
 libraries[otherothertest][destination] = /../../

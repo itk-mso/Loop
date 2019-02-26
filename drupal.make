@@ -18,15 +18,15 @@ libraries[test][destination] = libraries/../../../
 libraries[test][directory_name] = .test
 
 
-libraries[test][download][type] = "get"
-libraries[test][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"
-libraries[test][destination] = ../../
-libraries[test][directory_name] = .other
+libraries[othertest][download][type] = "get"
+libraries[othertest][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"
+libraries[othertest][destination] = ../../
+libraries[othertest][directory_name] = .other
 
-libraries[test][download][type] = "get"
-libraries[test][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"
-libraries[test][destination] = /
-libraries[test][directory_name] = .otherother
+libraries[otherothertest][download][type] = "get"
+libraries[otherothertest][download][url] = "https://code.angularjs.org/1.5.5/angular.min.js"
+libraries[otherothertest][destination] = /
+libraries[otherothertest][directory_name] = .otherother
 
 ; Install profile.
 ;projects[loopdk][type] = "profile"

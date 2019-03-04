@@ -32,6 +32,37 @@ function loop_disable_post_install() {
   variable_set('search_node_page_search_box', $search_box_settings);
 }
 
+
+/**
+ * Move revisioning list link into admin menu.
+ */
+function loop_disable_post_update_7001() {
+  $plid = array();
+  $path = 'admin';
+  $name = 'management';
+  $menu_info = db_select('menu_links', 'ml')
+    ->condition('ml.link_path', $path)
+    ->condition('ml.menu_name', $name)
+    ->fields('ml', array('mlid', 'plid'))
+    ->execute()
+    ->fetchAll();
+
+  foreach ($menu_info as $key => $value) {
+    $plid[] = $menu_info[$key]->mlid;
+  }
+
+  $values = array(
+    'menu_name' => $name,
+    'weight' => 10,
+    'link_title' => 'Revisioning list',
+    'link_path' => 'editor/dashboard/loop-content-revisioning-date',
+    'mlid' => 0,
+    'plid' => $plid[0],
+  );
+
+  menu_link_save($values);
+}
+
 /**
  * Helper function for deleting a menu item.
  *

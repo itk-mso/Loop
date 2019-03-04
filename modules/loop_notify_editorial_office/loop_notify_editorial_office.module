@@ -1,0 +1,165 @@
+<?php
+
+/**
+ * Implementation of hook_menu().
+ */
+function loop_notify_editorial_office_menu () {
+  $items = array();
+
+  $items['admin/config/content/editorial_office_config'] = array(
+    'title' => 'Loop editorial office notification settings',
+    'description' => 'Editorial office notification settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('loop_notify_editorial_office_admin_form'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function loop_notify_editorial_office_theme($existing, $type, $theme, $path) {
+  return array(
+    'loop_neo_block_form' => array(
+      'variables' => array(
+        'node' => NULL,
+        'loop_documents_menu' => NULL,
+        'form' => NULL,
+      ),
+      'template' => 'templates/loop-neo-block-form',
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_block_info().
+ */
+function loop_notify_editorial_office_block_info(){
+  $blocks = array();
+
+  $blocks['loop_neo_block'] = array(
+    'info'  => t('Notify editorial office'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implementation of hook_block_view().
+ */
+function loop_notify_editorial_office_block_view($delta = ''){
+  $block = array();
+
+  switch($delta) {
+    case 'loop_neo_block':
+      $block['subject'] = t('');
+      $block['content'] = array(
+        '#theme' => 'loop_neo_block_form',
+        '#node' => menu_get_object(),
+        '#form' => drupal_get_form('loop_notify_editorial_office_form')
+      );
+
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * Implements hook_form().
+ */
+function loop_notify_editorial_office_form(&$form_state){
+  $form = array();
+  $form['loop_notify_editorial_office_description'] = array(
+    '#type' => 'textarea',
+    '#required' => true,
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Send message'),
+  );
+
+  return $form;
+}
+
+/**
+ * Implements hook_form_submit().
+ *
+ * Send emails.
+ */
+function loop_notify_editorial_office_form_submit($form, &$form_state) {
+  drupal_set_message(t('A notification has been sent'));
+  global $user;
+  $user = user_load($user->uid);
+  drupal_mail(
+    'loop_notify_editorial_office',
+    'loop_notify_editorial_office_admin_mail',
+    variable_get('loop_notify_editorial_office_email', variable_get('site_mail')),
+    $user->language,
+    array(
+      'account' => $user,
+      'node' => menu_get_object(),
+      'content' => $form_state['values']['loop_notify_editorial_office_description']
+    )
+  );
+  drupal_mail(
+    'loop_notify_editorial_office',
+    'loop_notify_editorial_office_reporter_mail',
+    $user->mail,
+    $user->language,
+    array(
+      'account' => $user,
+      'node' => menu_get_object(),
+    )
+  );
+}
+
+/**
+ * Implements hook_form().
+ */
+function loop_notify_editorial_office_admin_form(&$form_state){
+  $form = array();
+
+  $form['loop_notify_editorial_office_email'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Email address'),
+    '#default_value' => variable_get('loop_notify_editorial_office_email', variable_get('site_mail')),
+    '#maxlength' => 128,
+    '#description' => ('The email address used to receive reported issues.'),
+  );
+
+  $form['loop_notify_editorial_office_email_message'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Email message'),
+    '#default_value' => variable_get('loop_notify_editorial_office_email_message', ''),
+    '#description' => ('The contents of the email send to the reporter of the issue.'),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_mail().
+ */
+function loop_notify_editorial_office_mail($key, &$message, $params) {
+  $user_wrapper = entity_metadata_wrapper('user', $params['account']);
+
+  if($key == 'loop_notify_editorial_office_admin_mail') {
+    $message['subject'] = t('New issue reported on @site_name', array('@site_name' => variable_get('site_name')));
+    $message['body'][] = t('A new issue was reported on @site_name', array('@site_name' => variable_get('site_name')));
+    $message['body'][] = '<strong>'. t('Document') . ': </strong>' . l($params['node']->title, '/node/' . $params['node']->nid, array());
+    $message['body'][] = '<strong>'. t('Reporter') . ': </strong>' . l($user_wrapper->field_first_name->value() . ' ' . $user_wrapper->field_last_name->value(), '/user/' . $user_wrapper->uid->value(), array());
+    $message['body'][] = '<strong>'. t('Comment') . ': </strong>';
+    $message['body'][] = $params['content'];
+  }
+  if($key == 'loop_notify_editorial_office_reporter_mail') {
+    $message['subject'] = t('Email receipt from @site_name', array('@site_name' => variable_get('site_name')));
+    $message['body'][] = t('Hello ') . $user_wrapper->field_first_name->value() . ' ' . $user_wrapper->field_last_name->value();
+    $message['body'][] = variable_get('loop_notify_editorial_office_email_message', '');
+    $message['body'][] = t('Thanks, @site_name', array('@site_name' => variable_get('site_name')));
+  }
+}

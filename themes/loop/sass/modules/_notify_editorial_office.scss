@@ -1,0 +1,27 @@
+/*
+* Notify editorial ofice
+*/
+
+.notify-editorial-office {
+  .form-item {
+    padding: 0;
+  }
+
+  textarea {
+    background-color: #fff;
+    margin-top: 1em;
+  }
+
+  input[type="submit"] {
+    font-size: 1em;
+    width: 100%;
+  }
+
+  &.js-toggle-data {
+    display:none;
+
+    &.is-shown {
+      display: block;
+    }
+  }
+}

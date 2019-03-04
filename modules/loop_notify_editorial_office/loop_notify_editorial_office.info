@@ -1,0 +1,4 @@
+name = Loop notify editorial office
+description = Block and configuration for notifying editorial office about content.
+core = 7.x
+package = Loop

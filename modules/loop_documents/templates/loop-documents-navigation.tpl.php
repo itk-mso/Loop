@@ -40,11 +40,11 @@
   <?php endif ?>
 
   <div class="loop-documents--box">
-    <h2 class="loop-documents--collection-meta-title no-margin js-toggle">
+    <h2 class="loop-documents--collection-meta-title no-margin js-toggle is-shown">
       <?php echo t('Collection metadata'); ?>
     </h2>
 
-    <div class="loop-documents--metadata js-toggle-data">
+    <div class="loop-documents--metadata js-toggle-data is-shown">
       <?php if (!empty($loop_documents_collection)): ?>
         <?php echo theme('loop_documents_collection_metadata', array('collection' => $loop_documents_collection)); ?>
       <?php endif ?>

@@ -1,5 +1,10 @@
 # Loop Changelog
 
+## Loop 1.8.21
+* LOOP-645: Added automatic opening of "about collection" for documents
+* LOOP-647: Added loop_notify editorial office module
+* LOOP-646: Allowed for showing next revision date
+
 ## Loop 1.8.18
 * SUPPORT-1924: Readded editor format to fix bug where questions could not be changed.
 

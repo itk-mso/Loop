@@ -9,10 +9,10 @@
  */
 ?>
 <div class="loop-documents--box">
-  <h2 class="loop-documents--collection-meta-title no-margin js-toggle">
+  <h2 class="loop-documents--collection-meta-title no-margin js-toggle-notify">
     <?php print t('Contact editorial office'); ?>
   </h2>
-  <div class="notify-editorial-office js-toggle-data">
+  <div class="notify-editorial-office js-toggle-data-notify">
     <?php print render($form) ?>
   </div>
 </div>

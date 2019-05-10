@@ -603,7 +603,7 @@ function loop_preprocess_user_profile(&$variables) {
  *
  * Remove the panel separator from the default rendering method.
  */
-function loop_panels_default_style_render_region($vars) {
+function loop_panels_default_style_render_region(&$vars) {
   $output = '';
   $output .= implode('', $vars['panes']);
   return $output;

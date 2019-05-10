@@ -23,6 +23,7 @@
       <?php endif; ?>
       <?php if (!empty($content['beta'])): ?>
         <div class="layout-element-beta">
+          <?php print render($layout['notify_editors']); ?>
           <?php print $content['beta']; ?>
         </div>
       <?php endif; ?>

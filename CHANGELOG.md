@@ -1,5 +1,8 @@
 # Loop Changelog
 
+## Loop 1.8.25
+* SUPPORT-2008: Changed implementation of neo block
+
 ## Loop 1.8.21
 * LOOP-645: Added automatic opening of "about collection" for documents
 * LOOP-647: Added loop_notify editorial office module

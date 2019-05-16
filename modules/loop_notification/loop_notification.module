@@ -437,6 +437,7 @@ function _loop_notification_modified_nodes($modification_limit) {
 
   try {
     $query->entityCondition('entity_type', 'node')
+      ->propertyCondition('status', NODE_PUBLISHED)
       ->propertyCondition('changed', $modification_limit, '>');
   }
   catch (EntityFieldQueryException $e) {

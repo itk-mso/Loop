@@ -1,5 +1,8 @@
 # Loop Changelog
 
+## Loop 1.8.27
+* SUPPORT-2030: Fixed check for last user notification
+
 ## Loop 1.8.25
 * SUPPORT-2008: Changed implementation of neo block
 

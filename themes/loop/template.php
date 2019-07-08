@@ -39,14 +39,14 @@ function loop_preprocess_page(&$variables) {
         menu_set_active_item('user');
 
         // Add notifications script.
-        $subscriptions_alter_flags = $GLOBALS['base_root'] . '/' . path_to_theme() . '/scripts/subscriptions-alter-flags.js';
+        $subscriptions_alter_flags = path_to_theme() . '/scripts/subscriptions-alter-flags.js';
         drupal_add_js($subscriptions_alter_flags, 'file');
       }
     }
   }
 
   if ($variables['is_front']) {
-    $update_script_path = $GLOBALS['base_root'] . '/' . path_to_theme() . '/scripts/frontpage-column-width.js';
+    $update_script_path = path_to_theme() . '/scripts/frontpage-column-width.js';
     drupal_add_js($update_script_path, 'file');
   }
 
@@ -221,10 +221,8 @@ function loop_preprocess_panels_pane(&$variables) {
 
   // Add message variable for panel pane.
   if ($variables['pane']->subtype == 'user_messages-panel_pane_1' || $variables['pane']->subtype == 'user_messages-panel_pane_5') {
-    global $base_root;
-
     $variables['message_count'] = _loop_fetch_user_new_notifications();
-    $update_script_path = $base_root . '/' . path_to_theme() . '/scripts/update-new-notifications.js';
+    $update_script_path = path_to_theme() . '/scripts/update-new-notifications.js';
     drupal_add_js($update_script_path, 'file');
     if (arg(0) == 'user') {
       $variables['theme_hook_suggestions'][] = 'panels_pane__user_page_unread_messages';
@@ -947,7 +945,7 @@ function loop_preprocess_views_view(&$vars) {
     $vars['user_messages'] = $new_message_count;
 
     // Add update notification script.
-    $update_script_path = $GLOBALS['base_root'] . '/' . path_to_theme() . '/scripts/update-new-notifications.js';
+    $update_script_path = path_to_theme() . '/scripts/update-new-notifications.js';
     drupal_add_js($update_script_path, 'file');
   }
 

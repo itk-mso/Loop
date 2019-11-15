@@ -9,7 +9,7 @@ projects[abuse][download][url] = "http://git.drupal.org/project/abuse.git"
 projects[abuse][download][branch] = "7.x-1.x-dev"
 
 projects[admin_views][subdir] = "contrib"
-projects[admin_views][version] = "1.6"
+projects[admin_views][version] = "1.7"
 
 projects[auto_entitylabel][subdir] = "contrib"
 projects[auto_entitylabel][version] = "1.4"
@@ -93,7 +93,7 @@ projects[jquery_update][subdir] = "contrib"
 projects[jquery_update][version] = "3.0-alpha5"
 
 projects[l10n_update][subdir] = "contrib"
-projects[l10n_update][version] = "2.2"
+projects[l10n_update][version] = "2.3"
 
 projects[libraries][subdir] = "contrib"
 projects[libraries][version] = "2.5"
@@ -259,7 +259,7 @@ projects[transliteration][subdir] = "contrib"
 projects[transliteration][version] = "3.2"
 
 projects[uuid][subdir] = "contrib"
-projects[uuid][version] = "1.2"
+projects[uuid][version] = "1.3"
 
 projects[uuid_features][subdir] = "contrib"
 projects[uuid_features][version] = "1.0-rc1"

@@ -127,6 +127,35 @@ function loop_notification_default_message_type() {
       ]
     }
   }');
+  $items['document_collection_edited'] = entity_import('message_type', '{
+    "name" : "document_collection_edited",
+    "description" : "Document collection edited",
+    "argument_keys" : [],
+    "argument" : [],
+    "category" : "message_type",
+    "data" : {
+      "token options" : { "clear" : 0 },
+      "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" }
+    },
+    "language" : "en",
+    "arguments" : null,
+    "message_text" : {
+      "da" : [
+        {
+          "value" : "Et sp\\u00f8rgsm\\u00e5l du f\\u00f8lger er blevet \\u00e6ndret \\u003Ca href=\\u0022\\/node\\/[message:field-message-node-reference:nid]\\u0022\\u003E[message:field-message-node-reference:field_description]\\u003C\\/a\\u003E",
+          "format" : "html",
+          "safe_value" : "Et sp\\u00f8rgsm\\u00e5l du f\\u00f8lger er blevet \\u00e6ndret \\u003Ca href=\\u0022\\/node\\/[message:field-message-node-reference:nid]\\u0022\\u003E[message:field-message-node-reference:field_description]\\u003C\\/a\\u003E"
+        }
+      ],
+      "en" : [
+        {
+          "value" : "A document collection has been edited: \\u003Ca href=\\u0022[message:field-message-node-reference:url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
+          "format" : "html",
+          "safe_value" : "A document collection has been edited: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
+        }
+      ]
+    }
+  }');
   $items['document_edited'] = entity_import('message_type', '{
     "name" : "document_edited",
     "description" : "Document edited",

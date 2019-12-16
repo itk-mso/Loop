@@ -31,6 +31,45 @@ function loop_notification_default_rules_configuration() {
       ]
     }
   }');
+  $items['loop_notification_create_notification_on_collection_edit'] = entity_import('rules_config', '{ "loop_notification_create_notification_on_collection_edit" : {
+      "LABEL" : "Create notification on collection edit",
+      "PLUGIN" : "rule set",
+      "OWNER" : "rules",
+      "REQUIRES" : [ "loop_notification", "rules" ],
+      "USES VARIABLES" : {
+        "active_user_object" : { "label" : "Active user objject", "type" : "user" },
+        "node_author" : { "label" : "node_author", "type" : "user" },
+        "node" : { "label" : "node", "type" : "node" }
+      },
+      "RULES" : [
+        { "RULE" : {
+            "PROVIDE" : { "entity_created" : { "entity_created" : "Created entity" } },
+            "IF" : [
+              { "NOT data_is" : { "data" : [ "active-user-object" ], "value" : [ "node-author" ] } }
+            ],
+            "DO" : [
+              { "entity_create" : {
+                  "USING" : {
+                    "type" : "message",
+                    "param_type" : "document_edited",
+                    "param_user" : [ "active-user-object" ]
+                  },
+                  "PROVIDE" : { "entity_created" : { "entity_created" : "Created entity" } }
+                }
+              },
+              { "data_set" : {
+                  "data" : [ "entity-created:field-message-node-reference" ],
+                  "value" : [ "node" ]
+                }
+              },
+              { "entity_save" : { "data" : [ "entity-created" ], "immediate" : 1 } }
+            ],
+            "LABEL" : "Create notification"
+          }
+        }
+      ]
+    }
+  }');
   $items['loop_notification_create_notification_on_comment_edit'] = entity_import('rules_config', '{ "loop_notification_create_notification_on_comment_edit" : {
       "LABEL" : "Create notification on comment edit",
       "PLUGIN" : "rule set",
@@ -187,12 +226,12 @@ function loop_notification_default_rules_configuration() {
       ]
     }
   }');
-  $items['rules_autosubscribe_node_post_author'] = entity_import('rules_config', '{ "rules_autosubscribe_node_post_author" : {
-      "LABEL" : "Autosubscribe node post author",
+  $items['rules_autosubscribe_node_loop_documents_collection_author'] = entity_import('rules_config', '{ "rules_autosubscribe_node_loop_documents_collection_author" : {
+      "LABEL" : "Autosubscribe node loop_documents_collection author",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
       "REQUIRES" : [ "flag", "rules" ],
-      "ON" : { "node_insert--post" : { "bundle" : "post" } },
+      "ON" : { "node_insert--loop_documents_collection" : { "bundle" : "loop_documents_collection" } },
       "DO" : [
         { "flag_flagnode" : {
             "flag" : "subscribe_node",
@@ -221,12 +260,12 @@ function loop_notification_default_rules_configuration() {
       ]
     }
   }');
-  $items['rules_autosubscribe_node_loop_documents_collection_author'] = entity_import('rules_config', '{ "rules_autosubscribe_node_loop_documents_collection_author" : {
-      "LABEL" : "Autosubscribe node loop_documents_collection author",
+  $items['rules_autosubscribe_node_post_author'] = entity_import('rules_config', '{ "rules_autosubscribe_node_post_author" : {
+      "LABEL" : "Autosubscribe node post author",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
       "REQUIRES" : [ "flag", "rules" ],
-      "ON" : { "node_insert--loop_documents_collection" : { "bundle" : "loop_documents_collection" } },
+      "ON" : { "node_insert--post" : { "bundle" : "post" } },
       "DO" : [
         { "flag_flagnode" : {
             "flag" : "subscribe_node",

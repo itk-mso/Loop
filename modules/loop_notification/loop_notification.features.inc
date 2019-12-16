@@ -137,14 +137,14 @@ function loop_notification_default_message_type() {
       "token options" : { "clear" : 0 },
       "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" }
     },
-    "language" : "en",
+    "language" : "da",
     "arguments" : null,
     "message_text" : {
       "da" : [
         {
-          "value" : "Et sp\\u00f8rgsm\\u00e5l du f\\u00f8lger er blevet \\u00e6ndret \\u003Ca href=\\u0022\\/node\\/[message:field-message-node-reference:nid]\\u0022\\u003E[message:field-message-node-reference:field_description]\\u003C\\/a\\u003E",
+          "value" : "En dokumentsamling er blevet \\u00e6ndret: \\u003Ca href=\\u0022[message:field-message-node-reference:url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
           "format" : "html",
-          "safe_value" : "Et sp\\u00f8rgsm\\u00e5l du f\\u00f8lger er blevet \\u00e6ndret \\u003Ca href=\\u0022\\/node\\/[message:field-message-node-reference:nid]\\u0022\\u003E[message:field-message-node-reference:field_description]\\u003C\\/a\\u003E"
+          "safe_value" : "En dokumentsamling er blevet \\u00e6ndret: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
         }
       ],
       "en" : [
@@ -166,14 +166,14 @@ function loop_notification_default_message_type() {
       "token options" : { "clear" : 0 },
       "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" }
     },
-    "language" : "en",
+    "language" : "da",
     "arguments" : null,
     "message_text" : {
       "da" : [
         {
-          "value" : "Et sp\\u00f8rgsm\\u00e5l du f\\u00f8lger er blevet \\u00e6ndret \\u003Ca href=\\u0022\\/node\\/[message:field-message-node-reference:nid]\\u0022\\u003E[message:field-message-node-reference:field_description]\\u003C\\/a\\u003E",
+          "value" : "Et dokument er blevet \\u00e6ndret: \\u003Ca href=\\u0022[message:field-message-node-reference:url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
           "format" : "html",
-          "safe_value" : "Et sp\\u00f8rgsm\\u00e5l du f\\u00f8lger er blevet \\u00e6ndret \\u003Ca href=\\u0022\\/node\\/[message:field-message-node-reference:nid]\\u0022\\u003E[message:field-message-node-reference:field_description]\\u003C\\/a\\u003E"
+          "safe_value" : "Et dokument er blevet \\u00e6ndret: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
         }
       ],
       "en" : [

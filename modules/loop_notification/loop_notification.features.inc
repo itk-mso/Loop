@@ -127,6 +127,64 @@ function loop_notification_default_message_type() {
       ]
     }
   }');
+  $items['document_added'] = entity_import('message_type', '{
+    "name" : "document_added",
+    "description" : "Document added",
+    "argument_keys" : [],
+    "argument" : [],
+    "category" : "message_type",
+    "data" : {
+      "token options" : { "clear" : 0 },
+      "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" }
+    },
+    "language" : "da",
+    "arguments" : null,
+    "message_text" : {
+      "da" : [
+        {
+          "value" : "Et nyt dokument er blevet oprettet: \\u003Ca href=\\u0022[message:field-message-node-reference:url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
+          "format" : "html",
+          "safe_value" : "Et nyt dokument er blevet oprettet: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
+        }
+      ],
+      "en" : [
+        {
+          "value" : "A new document has been added: \\u003Ca href=\\u0022[message:field-message-node-reference:url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
+          "format" : "html",
+          "safe_value" : "A new document has been added: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
+        }
+      ]
+    }
+  }');
+  $items['document_collection_added'] = entity_import('message_type', '{
+    "name" : "document_collection_added",
+    "description" : "Document collection added",
+    "argument_keys" : [],
+    "argument" : [],
+    "category" : "message_type",
+    "data" : {
+      "token options" : { "clear" : 0 },
+      "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" }
+    },
+    "language" : "da",
+    "arguments" : null,
+    "message_text" : {
+      "da" : [
+        {
+          "value" : "En ny dokumentsamling er blevet oprettet: \\u003Ca href=\\u0022[message:field-message-node-reference:url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
+          "format" : "html",
+          "safe_value" : "En ny dokumentsamling er blevet oprettet: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
+        }
+      ],
+      "en" : [
+        {
+          "value" : "A new document collection has been added: \\u003Ca href=\\u0022[message:field-message-node-reference:url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
+          "format" : "html",
+          "safe_value" : "A new document collection has been added: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
+        }
+      ]
+    }
+  }');
   $items['document_collection_edited'] = entity_import('message_type', '{
     "name" : "document_collection_edited",
     "description" : "Document collection edited",

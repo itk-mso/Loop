@@ -70,6 +70,45 @@ function loop_notification_default_rules_configuration() {
       ]
     }
   }');
+  $items['loop_notification_create_notification_on_document_edit'] = entity_import('rules_config', '{ "loop_notification_create_notification_on_document_edit" : {
+      "LABEL" : "Create notification on document edit",
+      "PLUGIN" : "rule set",
+      "OWNER" : "rules",
+      "REQUIRES" : [ "loop_notification", "rules" ],
+      "USES VARIABLES" : {
+        "active_user_object" : { "label" : "Active user objject", "type" : "user" },
+        "node_author" : { "label" : "node_author", "type" : "user" },
+        "node" : { "label" : "node", "type" : "node" }
+      },
+      "RULES" : [
+        { "RULE" : {
+            "PROVIDE" : { "entity_created" : { "entity_created" : "Created entity" } },
+            "IF" : [
+              { "NOT data_is" : { "data" : [ "active-user-object" ], "value" : [ "node-author" ] } }
+            ],
+            "DO" : [
+              { "entity_create" : {
+                  "USING" : {
+                    "type" : "message",
+                    "param_type" : "document_edited",
+                    "param_user" : [ "active-user-object" ]
+                  },
+                  "PROVIDE" : { "entity_created" : { "entity_created" : "Created entity" } }
+                }
+              },
+              { "data_set" : {
+                  "data" : [ "entity-created:field-message-node-reference" ],
+                  "value" : [ "node" ]
+                }
+              },
+              { "entity_save" : { "data" : [ "entity-created" ], "immediate" : 1 } }
+            ],
+            "LABEL" : "Create notification"
+          }
+        }
+      ]
+    }
+  }');
   $items['loop_notification_create_notification_on_node_create'] = entity_import('rules_config', '{ "loop_notification_create_notification_on_node_create" : {
       "LABEL" : "Create notification on node create",
       "PLUGIN" : "rule set",

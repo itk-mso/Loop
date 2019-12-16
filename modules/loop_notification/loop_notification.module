@@ -400,8 +400,13 @@ function _loop_notification_notify_user(
     }
     else {
       // Update node notification.
-      rules_invoke_component('loop_notification_create_notification_on_node_edit',
-        $user, $author, $node);
+      if ('loop_documents_document' === $node->type) {
+        rules_invoke_component('loop_notification_create_notification_on_document_edit',
+          $user, $author, $node);
+      } else {
+        rules_invoke_component('loop_notification_create_notification_on_node_edit',
+          $user, $author, $node);
+      }
     }
   }
 }

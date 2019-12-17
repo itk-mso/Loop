@@ -142,16 +142,16 @@ function loop_notification_default_message_type() {
     "message_text" : {
       "da" : [
         {
-          "value" : "Et nyt dokument er blevet oprettet: \\u003Ca href=\\u0022\\/node\\/[message:field-message-node-reference:nid]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
+          "value" : "Et dokument er blevet oprettet: \\u003Ca href=\\u0022\\/node\\/[message:field-message-node-reference:nid]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
           "format" : "html",
-          "safe_value" : "Et nyt dokument er blevet oprettet: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
+          "safe_value" : "Et dokument er blevet oprettet: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
         }
       ],
       "en" : [
         {
-          "value" : "A new document has been added: \\u003Ca href=\\u0022\\/node\\/[message:field-message-node-reference:nid]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
+          "value" : "A document has been added: \\u003Ca href=\\u0022\\/node\\/[message:field-message-node-reference:nid]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
           "format" : "html",
-          "safe_value" : "A new document has been added: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
+          "safe_value" : "A document has been added: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
         }
       ]
     }
@@ -171,16 +171,16 @@ function loop_notification_default_message_type() {
     "message_text" : {
       "da" : [
         {
-          "value" : "En ny dokumentsamling er blevet oprettet: \\u003Ca href=\\u0022\\/node\\/[message:field-message-node-reference:nid]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
+          "value" : "En dokumentsamling er blevet oprettet: \\u003Ca href=\\u0022\\/node\\/[message:field-message-node-reference:nid]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
           "format" : "html",
-          "safe_value" : "En ny dokumentsamling er blevet oprettet: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
+          "safe_value" : "En dokumentsamling er blevet oprettet: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
         }
       ],
       "en" : [
         {
-          "value" : "A new document collection has been added: \\u003Ca href=\\u0022\\/node\\/[message:field-message-node-reference:nid]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
+          "value" : "A document collection has been added: \\u003Ca href=\\u0022\\/node\\/[message:field-message-node-reference:nid]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E",
           "format" : "html",
-          "safe_value" : "A new document collection has been added: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
+          "safe_value" : "A document collection has been added: \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-message-node-reference:title]\\u003C\\/a\\u003E"
         }
       ]
     }

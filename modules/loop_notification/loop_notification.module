@@ -395,13 +395,25 @@ function _loop_notification_notify_user(
   else {
     if ($action == 'insert') {
       // Insert node notification.
-      rules_invoke_component('loop_notification_create_notification_on_node_create',
-        $user, $author, $node);
+      $component = 'loop_notification_create_notification_on_node_create';
+      if ('loop_documents_document' === $node->type) {
+        $component = 'loop_notification_create_notification_on_document_create';
+      }
+      elseif ('loop_documents_collection' === $node->type) {
+        $component = 'loop_notification_create_notification_on_collection_create';
+      }
+      rules_invoke_component($component, $user, $author, $node);
     }
     else {
       // Update node notification.
-      rules_invoke_component('loop_notification_create_notification_on_node_edit',
-        $user, $author, $node);
+      $component = 'loop_notification_create_notification_on_node_edit';
+      if ('loop_documents_document' === $node->type) {
+        $component = 'loop_notification_create_notification_on_document_edit';
+      }
+      elseif ('loop_documents_collection' === $node->type) {
+        $component = 'loop_notification_create_notification_on_collection_edit';
+      }
+      rules_invoke_component($component, $user, $author, $node);
     }
   }
 }

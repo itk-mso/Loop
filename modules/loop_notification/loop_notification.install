@@ -217,3 +217,34 @@ function loop_notification_update_7005() {
   );
   db_create_table('loop_notification_user_settings', $table);
 }
+
+/**
+ * Update document and collection notification messages.
+ */
+function loop_notification_update_7006() {
+  foreach ([
+    ['loop_documents_collection', 'node_added', 'document_collection_added'],
+    ['loop_documents_collection', 'node_edited', 'document_collection_edited'],
+    ['loop_documents_document', 'node_added', 'document_added'],
+    ['loop_documents_document', 'node_edited', 'document_edited'],
+  ] as list($node_type, $old_message_type, $new_message_type)) {
+    db_query(
+      '
+UPDATE message
+  JOIN field_data_field_message_node_reference
+	ON field_data_field_message_node_reference.entity_id = message.mid
+  JOIN node
+    ON node.nid = field_data_field_message_node_reference.field_message_node_reference_target_id
+   SET message.type = :new_message_type
+ WHERE 1=1
+   AND node.type = :node_type
+   AND message.type = :old_message_type
+',
+      [
+        'node_type' => $node_type,
+        'old_message_type' => $old_message_type,
+        'new_message_type' => $new_message_type,
+      ]
+    );
+  }
+}

@@ -188,6 +188,7 @@ projects[role_delegation][version] = "1.2"
 
 projects[rules][subdir] = "contrib"
 projects[rules][version] = "2.12"
+projects[rules][patch][] = "https://www.drupal.org/files/issues/rules-2020917.patch"
 
 ;;; 3.0???
 projects[saml_sp][subdir] = "contrib"

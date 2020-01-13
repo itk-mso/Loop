@@ -248,3 +248,10 @@ UPDATE message
     );
   }
 }
+
+/**
+ * Reset cache for "message" entities.
+ */
+function loop_notification_update_7007() {
+  entity_get_controller('message')->resetCache();
+}

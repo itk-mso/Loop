@@ -66,7 +66,7 @@ projects[field_group][subdir] = "contrib"
 projects[field_group][version] = "1.6"
 
 projects[file_entity][subdir] = "contrib"
-projects[file_entity][version] = "2.25"
+projects[file_entity][version] = "2.29"
 
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "3.9"
@@ -93,7 +93,7 @@ projects[jquery_update][subdir] = "contrib"
 projects[jquery_update][version] = "3.0-alpha5"
 
 projects[l10n_update][subdir] = "contrib"
-projects[l10n_update][version] = "2.3"
+projects[l10n_update][version] = "2.4"
 
 projects[libraries][subdir] = "contrib"
 projects[libraries][version] = "2.5"
@@ -111,7 +111,7 @@ projects[mailsystem][subdir] = "contrib"
 projects[mailsystem][version] = "2.35"
 
 projects[media][subdir] = "contrib"
-projects[media][version] = "2.21"
+projects[media][version] = "2.26"
 
 projects[menu_admin_per_menu][subdir] = "contrib"
 projects[menu_admin_per_menu][version] = "1.1"
@@ -132,7 +132,7 @@ projects[menu_view_unpublished][subdir] = "contrib"
 projects[menu_view_unpublished][version] = "1.0-beta3"
 
 projects[metatag][subdir] = "contrib"
-projects[metatag][version] = "1.25"
+projects[metatag][version] = "1.27"
 
 projects[message][subdir] = "contrib"
 projects[message][version] = "1.12"
@@ -263,7 +263,7 @@ projects[uuid][subdir] = "contrib"
 projects[uuid][version] = "1.3"
 
 projects[uuid_features][subdir] = "contrib"
-projects[uuid_features][version] = "1.0-rc1"
+projects[uuid_features][version] = "1.0-rc2"
 
 projects[variable][subdir] = "contrib"
 projects[variable][version] = "2.5"
@@ -272,14 +272,14 @@ projects[view_unpublished][subdir] = "contrib"
 projects[view_unpublished][version] = "1.2"
 
 projects[views][subdir] = "contrib"
-projects[views][version] = "3.23"
+projects[views][version] = "3.24"
 projects[views][patch][] = "https://www.drupal.org/files/issues/2018-06-05/views-make_destination_parameter_configurable-1239566-33.patch"
 
 projects[views_calc][subdir] = "contrib"
 projects[views_calc][version] = "1.1"
 
 projects[views_bulk_operations][subdir] = "contrib"
-projects[views_bulk_operations][version] = "3.5"
+projects[views_bulk_operations][version] = "3.6"
 
 projects[views_flag_refresh][subdir] = "contrib"
 projects[views_flag_refresh][version] = "1.3"

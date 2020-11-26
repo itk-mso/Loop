@@ -194,8 +194,8 @@ projects[rules][patch][] = "https://www.drupal.org/files/issues/rules-2020917.pa
 projects[saml_sp][subdir] = "contrib"
 projects[saml_sp][version] = "2.2"
 ; Custom SAML SP hooks
-projects[saml_sp][patch][] = "https://raw.githubusercontent.com/os2loop/profile/master/patches/saml_sp_drupal_login-alter_user_hooks.patch"
-projects[saml_sp][patch][] = "https://raw.githubusercontent.com/os2loop/profile/master/patches/saml_sp_remove_make_file.patch"
+projects[saml_sp][patch][] = "https://raw.githubusercontent.com/os2loop/profile/main/patches/saml_sp_drupal_login-alter_user_hooks.patch"
+projects[saml_sp][patch][] = "https://raw.githubusercontent.com/os2loop/profile/main/patches/saml_sp_remove_make_file.patch"
 
 projects[search_api][subdir] = "contrib"
 projects[search_api][version] = "1.26"

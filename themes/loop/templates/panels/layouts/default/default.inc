@@ -5,12 +5,6 @@
  * Implementation of hook_panels_layouts().
  */
 
-$notify_editors_block = '';
-
-if(module_exists('loop_notify_editorial_office')) {
-  $notify_editors_block = module_invoke('loop_notify_editorial_office', 'block_view', 'loop_neo_block');
-}
-
 $plugin = array(
   'title' => t('Default'),
   'category' => t('Loop custom'),
@@ -21,5 +15,4 @@ $plugin = array(
     'beta' => t('Beta'),
     'gamma' => t('Gamma'),
   ),
-  'notify_editors' => $notify_editors_block,
 );

@@ -163,3 +163,41 @@ function loop_notify_editorial_office_mail($key, &$message, $params) {
     $message['body'][] = t('Regards, @site_name', array('@site_name' => variable_get('site_name')));
   }
 }
+
+/**
+ * Implements hook_panels_pre_render().
+ *
+ * Inserts our “Notify editorial office” block before anything else in the
+ * navigation (beta) region on documents and document collections.
+ */
+function loop_notify_editorial_office_panels_pre_render($panels_display, $renderer)
+{
+  // Check if we have loop_documents-loop_documents_navigation in the panels.
+  if (isset($panels_display->content['new-cf7f5491-5b00-4348-9070-bdef0eeb1ee1'])) {
+    // Build a pane with our custom block (loop_neo_block).
+    $pane = new stdClass();
+    $pane->pid = 'new-10095d72-bcfa-402b-af60-3bcf092c515a';
+    $pane->panel = 'beta';
+    $pane->type = 'block';
+    $pane->subtype = 'loop_notify_editorial_office-loop_neo_block';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'override_title' => 0,
+      'override_title_text' => '',
+      'override_title_heading' => 'h2',
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => null,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = -1;
+    $pane->locks = array();
+    $pane->uuid = '10095d72-bcfa-402b-af60-3bcf092c515a';
+    $panels_display->content['new-10095d72-bcfa-402b-af60-3bcf092c515a'] = $pane;
+    // Insert our pane at before anything else.
+    array_unshift($panels_display->panels['beta'], 'new-10095d72-bcfa-402b-af60-3bcf092c515a');
+  }
+}
